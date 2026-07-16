@@ -1,7 +1,7 @@
 name: Build Unsigned IPA
 
 on:
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build iOS IPA
-    runs-on: macos-15
+    runs-on: macos-14
 
     steps:
       - name: 📦 Checkout repository
@@ -22,8 +22,8 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - name: 🍎 Select Xcode 16
-        run: sudo xcode-select -s /Applications/Xcode_16.3.app
+      - name: 🍎 Select Xcode 15.4 (has iOS 17 SDK pre-installed)
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
 
       - name: 📦 Install npm dependencies
         run: npm install
@@ -34,24 +34,27 @@ jobs:
       - name: 💎 Install CocoaPods dependencies
         run: |
           cd ios
-          pod install --repo-update
+          pod install
 
       - name: 🔨 Build Unsigned App
         run: |
-          xcodebuild -workspace ios/nyumbaniapp.xcworkspace \
-                     -scheme nyumbaniapp \
-                     -configuration Release \
-                     -sdk iphoneos \
-                     -derivedDataPath derivedData \
-                     CODE_SIGNING_ALLOWED=NO \
-                     CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_IDENTITY="" \
-                     build
+          xcodebuild \
+            -workspace ios/nyumbaniapp.xcworkspace \
+            -scheme nyumbaniapp \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath derivedData \
+            IPHONEOS_DEPLOYMENT_TARGET=16.0 \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY="" \
+            build | xcpretty --color && exit ${PIPESTATUS[0]}
 
       - name: 📦 Package into IPA
         run: |
           mkdir -p Payload
-          mv derivedData/Build/Products/Release-iphoneos/nyumbaniapp.app Payload/
+          APP_PATH=$(find derivedData/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1 | head -1)
+          mv "$APP_PATH" Payload/
           zip -r nyumbani-app-unsigned.ipa Payload
 
       - name: 🚀 Upload IPA Artifact
