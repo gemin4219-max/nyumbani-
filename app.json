@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#000000",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "deploymentTarget": "16.0",
+      "bundleIdentifier": "com.nyumbani.app"
     },
     "android": {
       "adaptiveIcon": {

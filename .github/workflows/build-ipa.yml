@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build iOS IPA
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - name: 📦 Checkout repository
@@ -22,11 +22,20 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - name: 🍎 Select Xcode 15.4 (has iOS 17 SDK pre-installed)
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      - name: 🍎 List available Xcode versions
+        run: ls /Applications | grep Xcode
+
+      - name: 🍎 Select Xcode 16.2
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          xcodebuild -version
+          xcodebuild -showsdks
 
       - name: 📦 Install npm dependencies
         run: npm install
+
+      - name: 💎 Install xcpretty
+        run: gem install xcpretty
 
       - name: 🛠️ Generate Native iOS Project (Expo Prebuild)
         run: npx expo prebuild --platform ios --no-install
@@ -38,22 +47,24 @@ jobs:
 
       - name: 🔨 Build Unsigned App
         run: |
+          set -o pipefail
           xcodebuild \
             -workspace ios/nyumbaniapp.xcworkspace \
             -scheme nyumbaniapp \
             -configuration Release \
-            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
             -derivedDataPath derivedData \
-            IPHONEOS_DEPLOYMENT_TARGET=16.0 \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_IDENTITY="" \
-            build | xcpretty --color && exit ${PIPESTATUS[0]}
+            PROVISIONING_PROFILE="" \
+            build 2>&1 | xcpretty --color
 
       - name: 📦 Package into IPA
         run: |
           mkdir -p Payload
-          APP_PATH=$(find derivedData/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1 | head -1)
+          APP_PATH=$(find derivedData/Build/Products -name "*.app" -maxdepth 3 | head -1)
+          echo "Found app at: $APP_PATH"
           mv "$APP_PATH" Payload/
           zip -r nyumbani-app-unsigned.ipa Payload
 
@@ -63,3 +74,4 @@ jobs:
           name: nyumbani-app-unsigned-ipa
           path: nyumbani-app-unsigned.ipa
           retention-days: 7
+
