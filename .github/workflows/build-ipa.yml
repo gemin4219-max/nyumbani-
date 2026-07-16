@@ -1,0 +1,60 @@
+name: Build Unsigned IPA
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    name: Build iOS IPA
+    runs-on: macos-latest
+
+    steps:
+      - name: 📦 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: 📦 Install npm dependencies
+        run: npm install
+
+      - name: 🛠️ Generate Native iOS Project (Expo Prebuild)
+        run: npx expo prebuild --platform ios
+
+      - name: 💎 Setup CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: 🔨 Build Unsigned App
+        run: |
+          # Expo strips hyphens, so nyumbani-app becomes nyumbaniapp
+          xcodebuild -workspace ios/nyumbaniapp.xcworkspace \
+                     -scheme nyumbaniapp \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -derivedDataPath derivedData \
+                     CODE_SIGNING_ALLOWED=NO \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_IDENTITY="" \
+                     build
+
+      - name: 📦 Package into IPA
+        run: |
+          mkdir -p Payload
+          mv derivedData/Build/Products/Release-iphoneos/nyumbaniapp.app Payload/
+          zip -r nyumbani-app-unsigned.ipa Payload
+
+      - name: 🚀 Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nyumbani-app-unsigned-ipa
+          path: nyumbani-app-unsigned.ipa
+          retention-days: 7
