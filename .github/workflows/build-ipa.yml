@@ -10,32 +10,34 @@ on:
 jobs:
   build:
     name: Build iOS IPA
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: 📦 Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      - name: ⚙️ Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: 'npm'
+
+      - name: 🍎 Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.3.app
 
       - name: 📦 Install npm dependencies
         run: npm install
 
       - name: 🛠️ Generate Native iOS Project (Expo Prebuild)
-        run: npx expo prebuild --platform ios
+        run: npx expo prebuild --platform ios --no-install
 
-      - name: 💎 Setup CocoaPods
+      - name: 💎 Install CocoaPods dependencies
         run: |
           cd ios
-          pod install
+          pod install --repo-update
 
       - name: 🔨 Build Unsigned App
         run: |
-          # Expo strips hyphens, so nyumbani-app becomes nyumbaniapp
           xcodebuild -workspace ios/nyumbaniapp.xcworkspace \
                      -scheme nyumbaniapp \
                      -configuration Release \
