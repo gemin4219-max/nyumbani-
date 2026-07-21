@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, ImageBa
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { hapticMedium, hapticHeavy, hapticSuccess } from '@/lib/haptics';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
@@ -10,6 +11,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 import { useCart } from '@/providers/CartProvider';
 import { PropertyCard, ShopItemCard } from '@/components/cards';
+import { SkeletonLoader } from '@/components/SkeletonLoader';
 
 const { width } = Dimensions.get('window');
 const CAROUSEL_WIDTH = width - Spacing.four * 2;
@@ -17,8 +19,9 @@ const CAROUSEL_WIDTH = width - Spacing.four * 2;
 const SERVICES = [
   { id: '1', title: 'Pango', image: require('../../../assets/images/pango.png'), route: '/property/' },
   { id: '2', title: 'Usafi', image: require('../../../assets/images/usafi.png'), route: '/cleaning/' },
-  { id: '3', title: 'Kuhama', image: require('../../../assets/images/kuhama.png'), route: '/relocation/' },
+  { id: '3', title: 'Kuhama', image: require('../../../assets/images/kuhama.png'), route: '/book/relocation' },
   { id: '4', title: 'Sokoni', image: require('../../../assets/images/sokoni.png'), route: '/market/' },
+  { id: '5', title: 'Smart Home', image: require('../../../assets/images/smarthome.png'), route: '/cameras/' },
 ];
 
 function ServiceCarousel({ colorScheme }: { colorScheme: 'light' | 'dark' }) {
@@ -60,7 +63,7 @@ function ServiceCarousel({ colorScheme }: { colorScheme: 'light' | 'dark' }) {
           <TouchableOpacity 
             style={styles.carouselSlide}
             activeOpacity={0.9}
-            onPress={() => router.push(item.route as any)}
+          onPress={() => { hapticMedium(); router.push(item.route as any); }}
           >
             <ImageBackground source={item.image} style={styles.carouselImage} imageStyle={{ borderRadius: 24 }}>
               <View style={styles.carouselOverlay}>
@@ -95,6 +98,7 @@ export default function HomeTab() {
   const [featuredKariakoo, setFeaturedKariakoo] = React.useState<any[]>([]);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const fetchAllData = async () => {
     if (!session?.user.id) return;
@@ -122,6 +126,7 @@ export default function HomeTab() {
     if (sokoni) setFeaturedSokoni(sokoni);
     if (usafi) setFeaturedUsafi(usafi);
     if (kariakoo) setFeaturedKariakoo(kariakoo);
+    setInitialLoading(false);
   };
 
   useFocusEffect(
@@ -147,7 +152,25 @@ export default function HomeTab() {
         {/* AUTO-PLAYING SERVICE CAROUSEL */}
         <ServiceCarousel colorScheme={colorScheme} />
 
-        {/* HOT & NEW PROPERTIES */}
+        {initialLoading ? (
+          <View style={{ paddingHorizontal: Spacing.four, marginTop: 24 }}>
+            <SkeletonLoader width={150} height={24} style={{ marginBottom: 16 }} />
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 16 }}>
+              {[1, 2].map((i) => (
+                <SkeletonLoader key={i} width={280} height={240} borderRadius={20} />
+              ))}
+            </ScrollView>
+            
+            <SkeletonLoader width={150} height={24} style={{ marginTop: 32, marginBottom: 16 }} />
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 16 }}>
+              {[1, 2, 3].map((i) => (
+                <SkeletonLoader key={i} width={160} height={180} borderRadius={16} />
+              ))}
+            </ScrollView>
+          </View>
+        ) : (
+          <>
+            {/* HOT & NEW PROPERTIES */}
         <View style={styles.sectionHeader}>
           <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Hot & New Pango</ThemedText>
         </View>
@@ -231,6 +254,7 @@ export default function HomeTab() {
              <TouchableOpacity 
                style={{ backgroundColor: colors.primary, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12, marginTop: 8 }}
                onPress={async () => {
+                 hapticHeavy();
                  const { error } = await supabase.from('bookings').insert({
                    profile_id: session.user.id,
                    service_type: 'cleaning',
@@ -240,15 +264,19 @@ export default function HomeTab() {
                  });
                  
                  if (error) {
-                   alert('Database Error! Did you run setup_database.sql in Supabase? Details: ' + error.message);
-                 } else {
-                   alert('Test Booking Created! Please reload the app (Press "r" in terminal).');
-                 }
+                    hapticSuccess();
+                    alert('Database Error! Did you run setup_database.sql in Supabase? Details: ' + error.message);
+                  } else {
+                    hapticSuccess();
+                    alert('Test Booking Created! Please reload the app (Press "r" in terminal).');
+                  }
                }}
              >
                 <ThemedText style={{ color: '#000', fontWeight: '700' }}>Generate Test Booking</ThemedText>
              </TouchableOpacity>
           </View>
+        )}
+        </>
         )}
 
       </ScrollView>

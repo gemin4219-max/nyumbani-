@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { useColorScheme, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { hapticMedium, hapticHeavy } from '@/lib/haptics';
 
 import { Colors } from '@/constants/theme';
 import { useCart } from '@/providers/CartProvider';
@@ -34,6 +35,12 @@ export default function TabsLayout() {
           fontWeight: '600',
         },
         headerTintColor: colors.text,
+        tabBarButton: (props) => (
+          <TouchableOpacity
+            {...props}
+            onPress={(e) => { hapticMedium(); props.onPress?.(e); }}
+          />
+        ),
       }}>
       <Tabs.Screen
         name="index"
@@ -80,7 +87,7 @@ export default function TabsLayout() {
       {/* Floating Cart Button */}
       {itemCount > 0 && (
         <TouchableOpacity 
-          onPress={() => router.push('/cart')}
+        onPress={() => { hapticHeavy(); router.push('/cart'); }}
           style={{
           position: 'absolute',
           bottom: 100, // Above the tab bar

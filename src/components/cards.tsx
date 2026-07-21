@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, TouchableOpacity, ImageBackground, StyleSheet, Linking } from 'react-native';
+import { View, ImageBackground, StyleSheet, Linking } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { hapticHeavy, hapticMedium, hapticSuccess } from '@/lib/haptics';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors } from '@/constants/theme';
@@ -12,9 +14,10 @@ export function PropertyCard({ property, colorScheme, fullWidth }: any) {
   const router = useRouter();
   
   return (
-    <TouchableOpacity 
+    <HapticButton 
+      hapticType="selection"
       activeOpacity={0.9} 
-      onPress={() => router.push(`/property/${property.id}`)}
+      onPress={() => { hapticMedium(); router.push(`/property/${property.id}`); }}
       style={[
         styles.propertyCard, 
         { backgroundColor: colors.backgroundElement, borderColor: colors.border },
@@ -39,25 +42,27 @@ export function PropertyCard({ property, colorScheme, fullWidth }: any) {
               TZS {Number(property.price).toLocaleString()} <ThemedText style={{ fontSize: 12, fontWeight: '400', color: colors.textSecondary }}>/ mo</ThemedText>
             </ThemedText>
           </View>
-          <TouchableOpacity 
-            onPress={() => Linking.openURL('tel:+255700000000')}
+          <HapticButton hapticType="heavy"
+            onPress={() => { hapticHeavy(); router.push(`/book/viewing?amount=0&propertyId=${property.id}&propertyTitle=${encodeURIComponent(property.title)}`); }}
             style={{ backgroundColor: colors.backgroundSelected, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, flexDirection: 'row', alignItems: 'center' }}>
-             <Ionicons name="call" color={colors.primary} size={16} />
-             <ThemedText style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginLeft: 6 }}>Reserve</ThemedText>
-          </TouchableOpacity>
+             <Ionicons name="calendar-outline" color={colors.primary} size={16} />
+             <ThemedText style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginLeft: 6 }}>View</ThemedText>
+          </HapticButton>
         </View>
       </View>
-    </TouchableOpacity>
+    </HapticButton>
   );
 }
 
 export function ShopItemCard({ item, colorScheme, type }: any) {
   const colors = Colors[colorScheme];
+  const router = useRouter();
   const { addToCart, items } = useCart();
   
   const cartItem = items.find(i => i.id === item.id);
 
   const handleAddToCart = () => {
+    hapticSuccess();
     addToCart({
       id: item.id,
       type: type,
@@ -69,7 +74,7 @@ export function ShopItemCard({ item, colorScheme, type }: any) {
   };
 
   return (
-    <TouchableOpacity 
+    <HapticButton hapticType="selection"
       activeOpacity={0.9} 
       style={[styles.shopCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
     >
@@ -85,26 +90,27 @@ export function ShopItemCard({ item, colorScheme, type }: any) {
         <ThemedText style={{ fontSize: 14, fontWeight: '800', color: colors.primary, marginTop: 8 }}>
           TZS {item.price.toLocaleString()} <ThemedText style={{ fontSize: 12, fontWeight: '400', color: colors.textSecondary }}>/ {item.unit}</ThemedText>
         </ThemedText>
-        {type === 'usafi' ? (
-          <TouchableOpacity onPress={() => Linking.openURL('tel:+255700000000')} style={[styles.addToCartBtn, { backgroundColor: colors.backgroundSelected, marginTop: 12 }]}>
-             <Ionicons name="call" color={colors.primary} size={16} />
-             <ThemedText style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginLeft: 4 }}>Book a Call</ThemedText>
-          </TouchableOpacity>
+        {type === 'usafi' || type === 'relocation' ? (
+          <HapticButton hapticType="heavy" onPress={() => router.push(`/book/${type}?amount=${item.price}`)} style={[styles.addToCartBtn, { backgroundColor: colors.backgroundSelected, marginTop: 12 }]}>
+             <Ionicons name="calendar-outline" color={colors.primary} size={16} />
+             <ThemedText style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginLeft: 4 }}>Book Now</ThemedText>
+          </HapticButton>
         ) : (
-          <TouchableOpacity onPress={handleAddToCart} style={[styles.addToCartBtn, { backgroundColor: cartItem ? colors.primary : colors.backgroundSelected, marginTop: 12 }]}>
+          <HapticButton hapticType="success" onPress={handleAddToCart} style={[styles.addToCartBtn, { backgroundColor: cartItem ? colors.primary : colors.backgroundSelected, marginTop: 12 }]}>
              <Ionicons name={cartItem ? "checkmark" : "cart-outline"} color={cartItem ? "#000" : colors.primary} size={16} />
              <ThemedText style={{ fontSize: 12, fontWeight: '700', color: cartItem ? "#000" : colors.text, marginLeft: 4 }}>
                {cartItem ? `Added (${cartItem.quantity})` : 'Add'}
              </ThemedText>
-          </TouchableOpacity>
+          </HapticButton>
         )}
       </View>
-    </TouchableOpacity>
+    </HapticButton>
   );
 }
 
 export function ShopItemCardFullWidth({ item, colorScheme, type }: any) {
   const colors = Colors[colorScheme];
+  const router = useRouter();
   const { addToCart, items } = useCart();
   
   const cartItem = items.find(i => i.id === item.id);
@@ -121,7 +127,7 @@ export function ShopItemCardFullWidth({ item, colorScheme, type }: any) {
   };
 
   return (
-    <TouchableOpacity 
+    <HapticButton hapticType="selection"
       activeOpacity={0.9} 
       style={[styles.shopCardFull, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
     >
@@ -137,21 +143,21 @@ export function ShopItemCardFullWidth({ item, colorScheme, type }: any) {
           TZS {item.price.toLocaleString()} <ThemedText style={{ fontSize: 12, fontWeight: '400', color: colors.textSecondary }}>/ {item.unit}</ThemedText>
         </ThemedText>
         
-        {type === 'usafi' ? (
-          <TouchableOpacity onPress={() => Linking.openURL('tel:+255700000000')} style={[styles.addToCartBtn, { backgroundColor: colors.backgroundSelected, marginTop: 12 }]}>
-             <Ionicons name="call" color={colors.primary} size={16} />
-             <ThemedText style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginLeft: 4 }}>Book a Call</ThemedText>
-          </TouchableOpacity>
+        {type === 'usafi' || type === 'relocation' ? (
+          <HapticButton hapticType="heavy" onPress={() => router.push(`/book/${type}?amount=${item.price}`)} style={[styles.addToCartBtn, { backgroundColor: colors.backgroundSelected, marginTop: 12 }]}>
+             <Ionicons name="calendar-outline" color={colors.primary} size={16} />
+             <ThemedText style={{ fontSize: 12, fontWeight: '700', color: colors.primary, marginLeft: 4 }}>Book Now</ThemedText>
+          </HapticButton>
         ) : (
-          <TouchableOpacity onPress={handleAddToCart} style={[styles.addToCartBtn, { backgroundColor: cartItem ? colors.primary : colors.backgroundSelected, marginTop: 12 }]}>
+          <HapticButton hapticType="success" onPress={handleAddToCart} style={[styles.addToCartBtn, { backgroundColor: cartItem ? colors.primary : colors.backgroundSelected, marginTop: 12 }]}>
              <Ionicons name={cartItem ? "checkmark" : "cart-outline"} color={cartItem ? "#000" : colors.primary} size={16} />
              <ThemedText style={{ fontSize: 12, fontWeight: '700', color: cartItem ? "#000" : colors.text, marginLeft: 4 }}>
                {cartItem ? `Added (${cartItem.quantity})` : 'Add to Cart'}
              </ThemedText>
-          </TouchableOpacity>
+          </HapticButton>
         )}
       </View>
-    </TouchableOpacity>
+    </HapticButton>
   );
 }
 

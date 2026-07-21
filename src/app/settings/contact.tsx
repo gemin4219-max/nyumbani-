@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, TextInput, ActivityIndicator } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -34,9 +35,9 @@ export default function ContactScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Contact Support</ThemedText>
         <View style={{ width: 24 }} />
       </View>
@@ -73,7 +74,7 @@ export default function ContactScreen() {
           />
         </View>
 
-        <TouchableOpacity 
+        <HapticButton hapticType="heavy"
           style={[styles.sendBtn, { backgroundColor: colors.primary, opacity: (!subject || !message) ? 0.5 : 1 }]}
           onPress={handleSend}
           disabled={sending || !subject || !message}
@@ -86,7 +87,7 @@ export default function ContactScreen() {
               <Ionicons name="send" size={18} color="#000" />
             </>
           )}
-        </TouchableOpacity>
+        </HapticButton>
 
         {/* Alternative Contact */}
         <View style={{ marginTop: 40, alignItems: 'center' }}>

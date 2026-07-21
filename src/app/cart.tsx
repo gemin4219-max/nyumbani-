@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, Image, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, Image, Alert, ActivityIndicator, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { hapticHeavy, hapticMedium, hapticLight, hapticError, hapticSuccess } from '@/lib/haptics';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
@@ -20,6 +21,8 @@ export default function CartScreen() {
   const { session, profile, refreshProfile } = useAuth();
   
   const [checkingOut, setCheckingOut] = useState(false);
+  const [address, setAddress] = useState(profile?.address || '');
+  const [contactPhone, setContactPhone] = useState(profile?.phone_number || '');
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
@@ -32,6 +35,17 @@ export default function CartScreen() {
         { 
           text: "Confirm", 
           onPress: async () => {
+            if (!address.trim()) {
+              hapticError();
+              Alert.alert("Required", "Please provide a delivery address.");
+              return;
+            }
+            if (!contactPhone.trim()) {
+              hapticError();
+              Alert.alert("Required", "Please provide a contact phone number.");
+              return;
+            }
+
             setCheckingOut(true);
             
             // 1. Check if user has enough balance
@@ -56,16 +70,18 @@ export default function CartScreen() {
             }
 
             // 3. Create a booking/transaction record
-            // We just use the first item's type as the service_type for simplicity,
-            // or we can call it 'marketplace_order'
+            const orderItems = items.map(item => `${item.quantity}x ${item.title} (TZS ${item.price})`).join('\n');
+            const finalNotes = `Delivery Address: ${address}\nContact Phone: ${contactPhone}\n\nOrder Details:\n${orderItems}`;
+
             const { error: bookingError } = await supabase
               .from('bookings')
               .insert({
                 profile_id: session?.user.id,
-                service_type: 'shopping',
+                service_type: 'market',
                 status: 'paid',
                 scheduled_date: new Date().toISOString(),
-                amount: cartTotal
+                amount: cartTotal,
+                notes: finalNotes
               });
 
             if (bookingError) {
@@ -80,7 +96,7 @@ export default function CartScreen() {
             clearCart();
 
             Alert.alert("Success!", "Your order has been placed successfully.", [
-              { text: "OK", onPress: () => router.push('/(tabs)') }
+              { text: "OK", onPress: () => { hapticSuccess(); router.push('/(tabs)'); } }
             ]);
           }
         }
@@ -91,7 +107,7 @@ export default function CartScreen() {
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <TouchableOpacity onPress={() => { hapticMedium(); router.back(); }} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Your Cart</ThemedText>
@@ -102,7 +118,7 @@ export default function CartScreen() {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Ionicons name="cart-outline" size={64} color={colors.textSecondary} />
           <ThemedText style={{ marginTop: 16, color: colors.textSecondary, fontSize: 16 }}>Your cart is empty.</ThemedText>
-          <TouchableOpacity onPress={() => router.back()} style={[styles.continueBtn, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <TouchableOpacity onPress={() => { hapticMedium(); router.back(); }} style={[styles.continueBtn, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
             <ThemedText style={{ color: colors.text, fontWeight: '600' }}>Continue Shopping</ThemedText>
           </TouchableOpacity>
         </View>
@@ -126,22 +142,43 @@ export default function CartScreen() {
                   </ThemedText>
                   
                   <View style={styles.quantityControl}>
-                    <TouchableOpacity onPress={() => updateQuantity(item.id, item.quantity - 1)} style={[styles.qBtn, { backgroundColor: colors.background }]}>
+                    <TouchableOpacity onPress={() => { hapticLight(); updateQuantity(item.id, item.quantity - 1); }} style={[styles.qBtn, { backgroundColor: colors.background }]}>
                       <Ionicons name="remove" size={16} color={colors.text} />
                     </TouchableOpacity>
                     <ThemedText style={{ width: 32, textAlign: 'center', fontWeight: '600', color: colors.text }}>{item.quantity}</ThemedText>
-                    <TouchableOpacity onPress={() => updateQuantity(item.id, item.quantity + 1)} style={[styles.qBtn, { backgroundColor: colors.background }]}>
+                    <TouchableOpacity onPress={() => { hapticLight(); updateQuantity(item.id, item.quantity + 1); }} style={[styles.qBtn, { backgroundColor: colors.background }]}>
                       <Ionicons name="add" size={16} color={colors.text} />
                     </TouchableOpacity>
                     
                     <View style={{ flex: 1 }} />
-                    <TouchableOpacity onPress={() => removeFromCart(item.id)}>
+                    <TouchableOpacity onPress={() => { hapticError(); removeFromCart(item.id); }}>
                       <Ionicons name="trash-outline" size={20} color="#EF4444" />
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
             ))}
+
+            <View style={[styles.checkoutForm, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+              <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 12 }}>Delivery Address</ThemedText>
+              <TextInput
+                style={[styles.input, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                placeholder="Where should we deliver this?"
+                placeholderTextColor={colors.textSecondary}
+                value={address}
+                onChangeText={setAddress}
+              />
+              
+              <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginTop: 16, marginBottom: 12 }}>Contact Phone Number</ThemedText>
+              <TextInput
+                style={[styles.input, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                placeholder="e.g. 07XXXXXXXX"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="phone-pad"
+                value={contactPhone}
+                onChangeText={setContactPhone}
+              />
+            </View>
           </ScrollView>
 
           <View style={[styles.footer, { backgroundColor: colors.backgroundElement, borderTopColor: colors.border }]}>
@@ -152,7 +189,7 @@ export default function CartScreen() {
 
             <TouchableOpacity 
               style={[styles.checkoutBtn, { backgroundColor: colors.primary }]}
-              onPress={handleCheckout}
+              onPress={() => { hapticHeavy(); handleCheckout(); }}
               disabled={checkingOut}
             >
               {checkingOut ? (
@@ -185,6 +222,9 @@ const styles = StyleSheet.create({
   quantityControl: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
   qBtn: { width: 28, height: 28, borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   
+  checkoutForm: { padding: 16, borderRadius: 16, borderWidth: 1, marginTop: Spacing.two, marginBottom: Spacing.four },
+  input: { padding: 14, borderRadius: 12, borderWidth: 1, fontSize: 15 },
+
   footer: { padding: Spacing.four, paddingBottom: Spacing.six, borderTopWidth: 1 },
   checkoutBtn: { height: 56, borderRadius: 16, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }
 });

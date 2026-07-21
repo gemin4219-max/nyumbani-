@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, ActivityIndicator, Image } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -51,9 +52,9 @@ export default function PaymentsScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Payment Methods</ThemedText>
         <View style={{ width: 24 }} />
       </View>
@@ -89,36 +90,37 @@ export default function PaymentsScreen() {
 
               <View style={[styles.actionsRow, { borderTopColor: colors.border }]}>
                 {!method.is_default && (
-                  <TouchableOpacity onPress={() => handleSetDefault(method.id)}>
+                  <HapticButton hapticType="selection" onPress={() => handleSetDefault(method.id)}>
                     <ThemedText style={{ color: colors.primary, fontWeight: '600' }}>Set as Default</ThemedText>
-                  </TouchableOpacity>
+                  </HapticButton>
                 )}
-                <TouchableOpacity onPress={() => handleDelete(method.id)} style={{ marginLeft: 'auto' }}>
+                <HapticButton hapticType="error" onPress={() => handleDelete(method.id)} style={{ marginLeft: 'auto' }}>
                   <ThemedText style={{ color: '#EF4444', fontWeight: '600' }}>Remove</ThemedText>
-                </TouchableOpacity>
+                </HapticButton>
               </View>
             </View>
           ))
         )}
 
         {/* Add New Button */}
-        <TouchableOpacity 
+        <HapticButton hapticType="heavy"
           style={[styles.addBtn, { backgroundColor: colors.primary }]}
           onPress={async () => {
              // Mock adding a payment method
              if (!session?.user.id) return;
              await supabase.from('payment_methods').insert({
                profile_id: session.user.id,
-               provider: 'M-Pesa',
-               account_number: '**** **** 1234',
+               type: 'mobile_money',
+               provider: 'M-PESA',
+               last_four: '9876',
                is_default: methods.length === 0
              });
              fetchMethods();
           }}
         >
           <Ionicons name="add" size={20} color="#000" />
-          <ThemedText style={{ color: '#000', fontWeight: '700', marginLeft: 8 }}>Add Mobile Money / Card</ThemedText>
-        </TouchableOpacity>
+          <ThemedText style={{ color: '#000', fontWeight: '700', marginLeft: 8 }}>Add New Method</ThemedText>
+        </HapticButton>
       </ScrollView>
     </SafeAreaView>
   );

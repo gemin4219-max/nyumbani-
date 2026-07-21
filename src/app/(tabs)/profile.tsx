@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, Modal, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, Modal, TextInput, ActivityIndicator } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -14,13 +15,13 @@ function ProfileOption({ icon, label, showArrow = true, colorScheme, isDestructi
   const contentColor = isDestructive ? '#EF4444' : colors.text;
 
   return (
-    <TouchableOpacity style={styles.optionRow} activeOpacity={0.7} onPress={onPress}>
+    <HapticButton style={styles.optionRow} onPress={onPress}>
       <View style={[styles.optionIcon, { backgroundColor: isDestructive ? 'rgba(239, 68, 68, 0.1)' : colors.backgroundSelected }]}>
         <Ionicons name={icon} size={20} color={isDestructive ? '#EF4444' : colors.primary} />
       </View>
       <ThemedText style={{ flex: 1, fontSize: 16, fontWeight: '500', color: contentColor }}>{label}</ThemedText>
       {showArrow && <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />}
-    </TouchableOpacity>
+    </HapticButton>
   );
 }
 
@@ -76,37 +77,37 @@ export default function ProfileTab() {
         <View style={[styles.profileHeader, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
           <View style={[styles.avatarLarge, { backgroundColor: colors.primary }]}>
             <ThemedText style={{ color: '#000', fontSize: 28, fontWeight: '700' }}>{initial}</ThemedText>
-            <TouchableOpacity 
+            <HapticButton hapticType="light"
               style={[styles.editBadge, { backgroundColor: colors.backgroundSelected, borderColor: colors.backgroundElement }]}
               onPress={() => setIsEditing(true)}
             >
               <Ionicons name="pencil" size={12} color={colors.primary} />
-            </TouchableOpacity>
+            </HapticButton>
           </View>
           <View style={{ alignItems: 'center', marginTop: 12 }}>
             <ThemedText style={{ fontSize: 24, fontWeight: '800', color: colors.text }}>{fullName}</ThemedText>
             <ThemedText style={{ fontSize: 15, color: colors.textSecondary, marginTop: 4 }}>{phone}</ThemedText>
             
             {profile?.user_type === 'admin' && (
-              <TouchableOpacity 
+              <HapticButton hapticType="heavy"
                 style={{ backgroundColor: colors.primary, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12, marginTop: 16, flexDirection: 'row', alignItems: 'center' }}
                 onPress={() => router.push('/admin/')}
               >
                 <Ionicons name="settings" size={16} color="#000" style={{ marginRight: 8 }} />
                 <ThemedText style={{ color: '#000', fontWeight: '700', fontSize: 13 }}>Admin Dashboard</ThemedText>
-              </TouchableOpacity>
+              </HapticButton>
             )}
             
             <ThemedText style={{ fontSize: 14, color: colors.textSecondary, marginTop: 12 }}>
               <Ionicons name="location-outline" size={12} /> {address}
             </ThemedText>
           </View>
-          <TouchableOpacity 
+          <HapticButton hapticType="light"
             style={[styles.editProfileBtn, { borderColor: colors.border }]}
             onPress={() => setIsEditing(true)}
           >
             <ThemedText style={{ fontSize: 14, fontWeight: '600', color: colors.text }}>Edit Profile</ThemedText>
-          </TouchableOpacity>
+          </HapticButton>
         </View>
 
         {/* SETTINGS SECTIONS */}
@@ -158,9 +159,9 @@ export default function ProfileTab() {
           <View style={[styles.modalContent, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
             <View style={styles.modalHeader}>
               <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Edit Profile</ThemedText>
-              <TouchableOpacity onPress={() => setIsEditing(false)}>
+              <HapticButton hapticType="light" onPress={() => setIsEditing(false)}>
                 <Ionicons name="close" size={24} color={colors.textSecondary} />
-              </TouchableOpacity>
+              </HapticButton>
             </View>
 
             <View style={styles.inputContainer}>
@@ -197,17 +198,13 @@ export default function ProfileTab() {
               />
             </View>
 
-            <TouchableOpacity 
+              <HapticButton hapticType="heavy"
               style={[styles.saveBtn, { backgroundColor: colors.primary }]}
               onPress={handleSaveProfile}
               disabled={saving}
             >
-              {saving ? (
-                <ActivityIndicator color="#000" />
-              ) : (
-                <ThemedText style={{ color: '#000', fontSize: 16, fontWeight: '700' }}>Save Changes</ThemedText>
-              )}
-            </TouchableOpacity>
+              {saving ? (<ActivityIndicator color="#000" />) : (<ThemedText style={{ color: '#000', fontSize: 16, fontWeight: '700' }}>Save Changes</ThemedText>)}
+            </HapticButton>
           </View>
         </View>
       </Modal>

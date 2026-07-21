@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, Switch } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, Switch } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -21,9 +22,9 @@ export default function NotificationsScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Notifications</ThemedText>
         <View style={{ width: 24 }} />
       </View>

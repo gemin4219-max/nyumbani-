@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, FlatList, useColorScheme, TouchableOpacity, RefreshControl, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList, useColorScheme, RefreshControl, Dimensions } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,9 +46,9 @@ export default function PangoScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Pango</ThemedText>
         <View style={{ width: 40 }} />
       </View>

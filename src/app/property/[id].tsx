@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, ImageBackground, Dimensions, Linking } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -126,7 +126,13 @@ export default function PropertyDetailsScreen() {
 
       {/* BOTTOM ACTION BAR */}
       <View style={[styles.bottomBar, { backgroundColor: colors.background, borderTopColor: colors.border }]}>
-         <TouchableOpacity style={[styles.primaryBtn, { backgroundColor: colors.primary }]} activeOpacity={0.8}>
+         <TouchableOpacity 
+            style={[styles.primaryBtn, { backgroundColor: colors.primary }]} 
+            activeOpacity={0.8}
+            onPress={() => {
+              router.push(`/book/viewing?amount=0&propertyId=${property.id}&propertyTitle=${encodeURIComponent(property.title)}`);
+            }}
+         >
             <ThemedText style={{ fontSize: 16, fontWeight: '700', color: '#000' }}>Book Viewing</ThemedText>
          </TouchableOpacity>
       </View>

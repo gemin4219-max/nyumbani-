@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -38,9 +39,9 @@ export default function HelpScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Help Center</ThemedText>
         <View style={{ width: 24 }} />
       </View>
@@ -60,13 +61,13 @@ export default function HelpScreen() {
             const isExpanded = expanded === index;
             return (
               <View key={index} style={{ borderBottomWidth: index === FAQS.length - 1 ? 0 : 1, borderBottomColor: colors.border }}>
-                <TouchableOpacity 
+                <HapticButton 
                   style={styles.faqRow}
                   onPress={() => setExpanded(isExpanded ? null : index)}
                 >
                   <ThemedText style={{ flex: 1, fontSize: 16, fontWeight: '600', color: colors.text }}>{faq.q}</ThemedText>
                   <Ionicons name={isExpanded ? "chevron-up" : "chevron-down"} size={20} color={colors.textSecondary} />
-                </TouchableOpacity>
+                </HapticButton>
                 {isExpanded && (
                   <View style={styles.faqAnswer}>
                     <ThemedText style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 22 }}>
@@ -80,7 +81,7 @@ export default function HelpScreen() {
         </View>
 
         {/* Contact Support CTA */}
-        <TouchableOpacity 
+        <HapticButton 
           style={[styles.contactBtn, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
           onPress={() => router.push('/settings/contact')}
         >
@@ -90,7 +91,7 @@ export default function HelpScreen() {
             <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>Contact our 24/7 support team.</ThemedText>
           </View>
           <Ionicons name="arrow-forward" size={20} color={colors.textSecondary} />
-        </TouchableOpacity>
+        </HapticButton>
 
       </ScrollView>
     </SafeAreaView>

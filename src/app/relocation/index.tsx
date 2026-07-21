@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, useColorScheme, TouchableOpacity, ImageBackground, Linking } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, ImageBackground, Linking } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,9 +18,9 @@ export default function RelocationScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Kuhama</ThemedText>
         <View style={{ width: 24 }} />
       </View>
@@ -49,13 +50,13 @@ export default function RelocationScreen() {
             <ThemedText style={{ fontSize: 14, color: colors.textSecondary, marginTop: 4 }}>Your belongings are packed and transported with the utmost care.</ThemedText>
           </View>
 
-          <TouchableOpacity 
-            onPress={() => Linking.openURL('tel:+255700000000')}
+          <HapticButton hapticType="heavy"
+            onPress={() => router.push('/book/relocation')}
             style={[styles.callBtn, { backgroundColor: colors.primary }]}
           >
-            <Ionicons name="call" size={24} color="#000" />
-            <ThemedText style={{ fontSize: 18, fontWeight: '800', color: '#000', marginLeft: 12 }}>Call to Book a Truck</ThemedText>
-          </TouchableOpacity>
+            <Ionicons name="calendar-outline" size={24} color="#000" />
+            <ThemedText style={{ fontSize: 18, fontWeight: '800', color: '#000', marginLeft: 12 }}>Book a Truck</ThemedText>
+          </HapticButton>
         </View>
       </ScrollView>
     </SafeAreaView>

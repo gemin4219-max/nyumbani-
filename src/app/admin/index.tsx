@@ -55,6 +55,13 @@ export default function AdminDashboardScreen() {
         <ThemedText style={styles.sectionTitle}>Content Management</ThemedText>
         
         <AdminCard 
+          title="Manage Bookings" 
+          icon="calendar" 
+          route="/admin/manage-bookings"
+          description="View, dispatch, and refund all service bookings."
+        />
+
+        <AdminCard 
           title="Manage Pango" 
           icon="business" 
           route="/admin/manage-pango"

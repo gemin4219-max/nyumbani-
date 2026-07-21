@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 
-function ActivityItem({ title, date, status, icon, colorScheme }: any) {
+function ActivityItem({ title, date, status, icon, colorScheme, onPress }: any) {
   const colors = Colors[colorScheme as 'light' | 'dark'];
   
   const getStatusColor = () => {
@@ -20,7 +22,7 @@ function ActivityItem({ title, date, status, icon, colorScheme }: any) {
   };
 
   return (
-    <TouchableOpacity style={[styles.activityItem, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]} activeOpacity={0.7}>
+    <HapticButton onPress={onPress} hapticType="selection" style={[styles.activityItem, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
       <View style={[styles.iconBox, { backgroundColor: colors.backgroundSelected }]}>
         <Ionicons name={icon} size={24} color={colors.primary} />
       </View>
@@ -31,7 +33,7 @@ function ActivityItem({ title, date, status, icon, colorScheme }: any) {
       <View style={[styles.statusBadge, { backgroundColor: getStatusColor() + '20' }]}>
         <ThemedText style={{ fontSize: 12, fontWeight: '600', color: getStatusColor() }}>{status}</ThemedText>
       </View>
-    </TouchableOpacity>
+    </HapticButton>
   );
 }
 
@@ -41,6 +43,7 @@ export default function BookingsTab() {
   const colors = Colors[colorScheme];
   const [activeTab, setActiveTab] = useState('Upcoming');
   const { session } = useAuth();
+  const router = useRouter();
   
   const [upcoming, setUpcoming] = useState<any[]>([]);
   const [past, setPast] = useState<any[]>([]);
@@ -73,7 +76,7 @@ export default function BookingsTab() {
 
       <View style={[styles.segmentControl, { backgroundColor: colors.border }]}>
         {['Upcoming', 'Past'].map(tab => (
-          <TouchableOpacity 
+          <HapticButton hapticType="selection"
             key={tab}
             style={[styles.segmentBtn, activeTab === tab && { backgroundColor: colors.backgroundElement }]}
             onPress={() => setActiveTab(tab)}
@@ -81,7 +84,7 @@ export default function BookingsTab() {
             <ThemedText style={{ fontWeight: activeTab === tab ? '600' : '500', color: activeTab === tab ? colors.text : colors.textSecondary }}>
               {tab}
             </ThemedText>
-          </TouchableOpacity>
+          </HapticButton>
         ))}
       </View>
 
@@ -98,6 +101,7 @@ export default function BookingsTab() {
                 status={b.status} 
                 icon="calendar-outline" 
                 colorScheme={colorScheme} 
+                onPress={() => router.push(`/booking/${b.id}`)}
               />
             ))
           )
@@ -113,6 +117,7 @@ export default function BookingsTab() {
                 status={b.status} 
                 icon="checkmark-circle-outline" 
                 colorScheme={colorScheme} 
+                onPress={() => router.push(`/booking/${b.id}`)}
               />
             ))
           )

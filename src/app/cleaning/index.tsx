@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, FlatList, useColorScheme, TouchableOpacity, RefreshControl, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList, useColorScheme, RefreshControl, Dimensions } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
-import { ShopItemCard } from '@/components/cards';
+import { ShopItemCard, ShopItemCardFullWidth } from '@/components/cards';
 
 const { width } = Dimensions.get('window');
 
@@ -45,9 +46,9 @@ export default function CleaningScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Usafi</ThemedText>
         <View style={{ width: 24 }} />
       </View>
@@ -55,9 +56,7 @@ export default function CleaningScreen() {
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
-        numColumns={2}
         contentContainerStyle={styles.scrollContent}
-        columnWrapperStyle={styles.columnWrapper}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
         ListHeaderComponent={
@@ -70,11 +69,10 @@ export default function CleaningScreen() {
           <ThemedText style={{ padding: Spacing.four, color: colors.textSecondary }}>No services found.</ThemedText>
         }
         renderItem={({ item }) => (
-          <ShopItemCard 
+          <ShopItemCardFullWidth 
             item={{...item, image: require('../../../assets/images/usafi.png')}} 
             colorScheme={colorScheme} 
             type="usafi"
-            fullWidth={false}
           />
         )}
       />

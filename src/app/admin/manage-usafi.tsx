@@ -10,8 +10,6 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 
-const USAFI_FEATURES = ['Eco-Friendly', 'Deep Cleaning', '24/7 Availability', 'Certified', 'Fast Service'];
-
 export default function ManageUsafiScreen() {
   const scheme = useColorScheme();
   const colorScheme = scheme === 'dark' ? 'dark' : 'light';
@@ -27,7 +25,6 @@ export default function ManageUsafiScreen() {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [unit, setUnit] = useState('session');
-  const [badgeText, setBadgeText] = useState('New');
   const [description, setDescription] = useState('');
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [image, setImage] = useState<{ uri: string, base64?: string } | null>(null);
@@ -74,7 +71,6 @@ export default function ManageUsafiScreen() {
     setTitle('');
     setPrice('');
     setUnit('session');
-    setBadgeText('New');
     setDescription('');
     setSelectedFeatures([]);
     setImage(null);
@@ -86,7 +82,6 @@ export default function ManageUsafiScreen() {
     setTitle(item.title);
     setPrice(item.price.toString());
     setUnit(item.unit);
-    setBadgeText(item.badge_text || '');
     setDescription(item.description || '');
     setSelectedFeatures(item.features || []);
     setImage(item.image_url ? { uri: item.image_url } : null);
@@ -131,7 +126,6 @@ export default function ManageUsafiScreen() {
       title,
       price: Number(price),
       unit,
-      badge_text: badgeText,
       description,
       features: selectedFeatures,
       image_url: uploadedImageUrl,
@@ -185,20 +179,9 @@ export default function ManageUsafiScreen() {
             <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={title} onChangeText={setTitle} placeholder="e.g. Deep Sofa Cleaning" placeholderTextColor={colors.textSecondary} />
           </View>
 
-          <View style={{ flexDirection: 'row', gap: 16 }}>
-            <View style={[styles.inputContainer, { flex: 1 }]}>
-              <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Price (TZS)</ThemedText>
-              <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={price} onChangeText={setPrice} placeholder="e.g. 50000" placeholderTextColor={colors.textSecondary} keyboardType="numeric" />
-            </View>
-            <View style={[styles.inputContainer, { flex: 1 }]}>
-              <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Unit</ThemedText>
-              <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={unit} onChangeText={setUnit} placeholder="e.g. session, room" placeholderTextColor={colors.textSecondary} />
-            </View>
-          </View>
-
           <View style={styles.inputContainer}>
-            <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Badge Text (Optional)</ThemedText>
-            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={badgeText} onChangeText={setBadgeText} placeholder="e.g. Hot, New" placeholderTextColor={colors.textSecondary} />
+            <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Base Price (TZS)</ThemedText>
+            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={price} onChangeText={setPrice} placeholder="e.g. 50000" placeholderTextColor={colors.textSecondary} keyboardType="numeric" />
           </View>
 
           <View style={styles.inputContainer}>
@@ -206,19 +189,7 @@ export default function ManageUsafiScreen() {
             <TextInput style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={description} onChangeText={setDescription} placeholder="Describe the service..." placeholderTextColor={colors.textSecondary} multiline numberOfLines={4} />
           </View>
 
-          <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Features</ThemedText>
-          <View style={styles.featuresContainer}>
-            {USAFI_FEATURES.map(feat => {
-              const active = selectedFeatures.includes(feat);
-              return (
-                <TouchableOpacity key={feat} onPress={() => toggleFeature(feat)} style={[styles.featureChip, { backgroundColor: active ? colors.primary : colors.backgroundElement, borderColor: active ? colors.primary : colors.border }]}>
-                  <ThemedText style={{ color: active ? '#000' : colors.text, fontSize: 13, fontWeight: '600' }}>{feat}</ThemedText>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          <TouchableOpacity style={[styles.postBtn, { backgroundColor: colors.primary, opacity: (!title || !price || !unit) ? 0.5 : 1 }]} onPress={handleSave} disabled={saving || !title || !price || !unit}>
+          <TouchableOpacity style={[styles.postBtn, { backgroundColor: colors.primary, opacity: (!title || !price) ? 0.5 : 1 }]} onPress={handleSave} disabled={saving || !title || !price}>
             {saving ? <ActivityIndicator color="#000" /> : <ThemedText style={{ color: '#000', fontSize: 16, fontWeight: '700' }}>{editingId ? 'Save Changes' : 'Publish to Live App'}</ThemedText>}
           </TouchableOpacity>
         </ScrollView>

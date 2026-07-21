@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme, Alert } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, Alert } from 'react-native';
+import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -45,9 +46,9 @@ export default function PrivacyScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+        <HapticButton onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+        </HapticButton>
         <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Privacy & Security</ThemedText>
         <View style={{ width: 24 }} />
       </View>
@@ -56,35 +57,35 @@ export default function PrivacyScreen() {
         
         <ThemedText style={styles.sectionTitle}>Security</ThemedText>
         <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
-          <TouchableOpacity style={styles.settingRow} onPress={handleChangePassword}>
+          <HapticButton hapticType="selection" style={styles.settingRow} onPress={handleChangePassword}>
             <View style={{ flex: 1 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Change Password</ThemedText>
               <ThemedText style={{ color: colors.textSecondary, fontSize: 13, marginTop: 4 }}>Send a reset link to your registered email.</ThemedText>
             </View>
             <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
+          </HapticButton>
         </View>
 
         <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>Data Management</ThemedText>
         <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
-          <TouchableOpacity style={styles.settingRow} onPress={() => alert('Data export started. We will email you a secure link.')}>
+          <HapticButton hapticType="selection" style={styles.settingRow} onPress={() => alert('Data export started. We will email you a secure link.')}>
             <View style={{ flex: 1 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Export My Data</ThemedText>
               <ThemedText style={{ color: colors.textSecondary, fontSize: 13, marginTop: 4 }}>Download a copy of your bookings and info.</ThemedText>
             </View>
             <Ionicons name="download-outline" size={20} color={colors.textSecondary} />
-          </TouchableOpacity>
+          </HapticButton>
         </View>
 
         <ThemedText style={[styles.sectionTitle, { marginTop: 24, color: '#EF4444' }]}>Danger Zone</ThemedText>
         <View style={[styles.sectionContainer, { backgroundColor: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.3)' }]}>
-          <TouchableOpacity style={styles.settingRow} onPress={handleDeleteAccount}>
+          <HapticButton hapticType="error" style={styles.settingRow} onPress={handleDeleteAccount}>
             <View style={{ flex: 1 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: '#EF4444' }}>Delete Account</ThemedText>
               <ThemedText style={{ color: colors.textSecondary, fontSize: 13, marginTop: 4 }}>Permanently remove your account and data.</ThemedText>
             </View>
             <Ionicons name="trash-outline" size={20} color="#EF4444" />
-          </TouchableOpacity>
+          </HapticButton>
         </View>
 
       </ScrollView>
