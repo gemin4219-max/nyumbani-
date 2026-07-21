@@ -39,11 +39,11 @@ jobs:
       - name: 🔨 Archive App (unsigned)
         run: |
           xcodebuild archive \
-            -workspace ios/nyumbaniapp.xcworkspace \
-            -scheme nyumbaniapp \
+            -workspace ios/Nyumbani.xcworkspace \
+            -scheme Nyumbani \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $RUNNER_TEMP/nyumbaniapp.xcarchive \
+            -archivePath $RUNNER_TEMP/Nyumbani.xcarchive \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_IDENTITY="" \
@@ -52,7 +52,7 @@ jobs:
       - name: 📦 Package into unsigned IPA
         run: |
           mkdir -p Payload
-          cp -r "$RUNNER_TEMP/nyumbaniapp.xcarchive/Products/Applications/nyumbaniapp.app" Payload/
+          cp -r "$RUNNER_TEMP/Nyumbani.xcarchive/Products/Applications/Nyumbani.app" Payload/
           zip -r nyumbani-app-unsigned.ipa Payload/
 
       - name: 🚀 Upload IPA Artifact
