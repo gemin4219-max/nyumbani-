@@ -118,7 +118,7 @@ export default function CartScreen() {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Ionicons name="cart-outline" size={64} color={colors.textSecondary} />
           <ThemedText style={{ marginTop: 16, color: colors.textSecondary, fontSize: 16 }}>Your cart is empty.</ThemedText>
-          <TouchableOpacity onPress={() => { hapticMedium(); router.back(); }} style={[styles.continueBtn, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <TouchableOpacity onPress={() => { hapticMedium(); router.back(); }} style={[styles.continueBtn]}>
             <ThemedText style={{ color: colors.text, fontWeight: '600' }}>Continue Shopping</ThemedText>
           </TouchableOpacity>
         </View>
@@ -126,7 +126,7 @@ export default function CartScreen() {
         <>
           <ScrollView contentContainerStyle={styles.scrollContent}>
             {items.map(item => (
-              <View key={item.id} style={[styles.cartItem, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+              <View key={item.id} style={[styles.cartItem]}>
                 {item.image_url ? (
                   <Image source={{ uri: item.image_url }} style={styles.itemImage} />
                 ) : (
@@ -159,10 +159,10 @@ export default function CartScreen() {
               </View>
             ))}
 
-            <View style={[styles.checkoutForm, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View style={[styles.checkoutForm]}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 12 }}>Delivery Address</ThemedText>
               <TextInput
-                style={[styles.input, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.background }]}
                 placeholder="Where should we deliver this?"
                 placeholderTextColor={colors.textSecondary}
                 value={address}
@@ -171,7 +171,7 @@ export default function CartScreen() {
               
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginTop: 16, marginBottom: 12 }}>Contact Phone Number</ThemedText>
               <TextInput
-                style={[styles.input, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.background }]}
                 placeholder="e.g. 07XXXXXXXX"
                 placeholderTextColor={colors.textSecondary}
                 keyboardType="phone-pad"
@@ -216,13 +216,13 @@ const styles = StyleSheet.create({
   
   continueBtn: { marginTop: 24, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 16, borderWidth: 1 },
   
-  cartItem: { flexDirection: 'row', padding: 12, borderRadius: 16, borderWidth: 1, marginBottom: 12 },
+  cartItem: { flexDirection: 'row', padding: 12, borderRadius: 16,  marginBottom: 12 },
   itemImage: { width: 80, height: 80, borderRadius: 12 },
   
   quantityControl: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
   qBtn: { width: 28, height: 28, borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   
-  checkoutForm: { padding: 16, borderRadius: 16, borderWidth: 1, marginTop: Spacing.two, marginBottom: Spacing.four },
+  checkoutForm: { padding: 16, borderRadius: 16,  marginTop: Spacing.two, marginBottom: Spacing.four },
   input: { padding: 14, borderRadius: 12, borderWidth: 1, fontSize: 15 },
 
   footer: { padding: Spacing.four, paddingBottom: Spacing.six, borderTopWidth: 1 },

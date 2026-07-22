@@ -126,7 +126,7 @@ export default function WaterScreen() {
           
           <View style={[styles.inputGroup, { marginTop: 16 }]}>
             <ThemedText style={{ color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Account Number</ThemedText>
-            <View style={[styles.phoneInputContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View style={[styles.phoneInputContainer]}>
               <Ionicons name="water-outline" size={20} color={colors.primary} style={{ marginRight: 8 }} />
               <TextInput
                 style={[styles.phoneInput, { color: colors.text }]}
@@ -166,7 +166,7 @@ export default function WaterScreen() {
           )}
 
           {billDetails ? (
-            <View style={[styles.billCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View style={[styles.billCard]}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
                 <ThemedText style={{ color: colors.textSecondary }}>Customer Name</ThemedText>
                 <ThemedText style={{ fontWeight: '600' }}>{billDetails.name}</ThemedText>
@@ -227,6 +227,6 @@ const styles = StyleSheet.create({
   phoneInput: { flex: 1, fontSize: 16, fontWeight: '500' },
   savedMeterBtn: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, borderWidth: 1, marginRight: 12 },
   submitBtn: { height: 56, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
-  billCard: { padding: 24, borderRadius: 24, borderWidth: 1, marginTop: 8 },
+  billCard: { padding: 24, borderRadius: 24,  marginTop: 8 },
   divider: { height: 1, width: '100%' }
 });

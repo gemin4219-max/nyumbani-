@@ -14,7 +14,7 @@ function ActivityItem({ title, date, status, icon, colorScheme, onPress }: any) 
   const colors = Colors[colorScheme as 'light' | 'dark'];
   
   const getStatusColor = () => {
-    if (status === 'confirmed' || status === 'pending') return '#3B82F6';
+    if (status === 'confirmed' || status === 'pending') return '#D4AF37';
     if (status === 'in_progress') return '#F59E0B';
     if (status === 'completed') return '#10B981';
     if (status === 'cancelled') return '#EF4444';
@@ -22,7 +22,7 @@ function ActivityItem({ title, date, status, icon, colorScheme, onPress }: any) 
   };
 
   return (
-    <HapticButton onPress={onPress} hapticType="selection" style={[styles.activityItem, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+    <HapticButton onPress={onPress} hapticType="selection" style={[styles.activityItem]}>
       <View style={[styles.iconBox, { backgroundColor: colors.backgroundSelected }]}>
         <Ionicons name={icon} size={24} color={colors.primary} />
       </View>
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderRadius: 16,
-    borderWidth: 1,
+    
     marginBottom: 12,
   },
   iconBox: {

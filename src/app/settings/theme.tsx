@@ -46,7 +46,7 @@ export default function ThemeScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         
         <ThemedText style={styles.sectionTitle}>Appearance</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.sectionContainer]}>
           <Option label="System Default" value="system" icon="phone-portrait-outline" />
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
           <Option label="Light Mode" value="light" icon="sunny-outline" />
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     borderRadius: 20,
-    borderWidth: 1,
+    
     overflow: 'hidden',
   },
   settingRow: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    borderWidth: 2,
+    
     justifyContent: 'center',
     alignItems: 'center',
   },

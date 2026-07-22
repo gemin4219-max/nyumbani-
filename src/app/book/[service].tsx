@@ -201,7 +201,7 @@ export default function BookServiceScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         
         {isViewing && (
-          <View style={[styles.card, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.card]}>
             <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 8 }}>Property Details</ThemedText>
             <ThemedText style={{ fontSize: 18, fontWeight: '800', color: colors.primary }}>{propertyTitle}</ThemedText>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
@@ -211,7 +211,7 @@ export default function BookServiceScreen() {
           </View>
         )}
 
-        <View style={[styles.card, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.card]}>
           <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 16 }}>
             {isViewing ? 'When do you want to view?' : 'When do you need this?'}
           </ThemedText>
@@ -258,7 +258,7 @@ export default function BookServiceScreen() {
         </View>
 
         {!isViewing && (
-          <View style={[styles.card, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.card]}>
             <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 12 }}>Service Location</ThemedText>
             
             {savedAddresses.length > 0 && (
@@ -272,7 +272,7 @@ export default function BookServiceScreen() {
                       { 
                         marginRight: 8,
                         backgroundColor: address === addr.full_address ? colors.primary : colors.background, 
-                        borderColor: address === addr.full_address ? colors.primary : colors.border 
+                        
                       }
                     ]}
                     onPress={() => setAddress(addr.full_address)}
@@ -289,7 +289,7 @@ export default function BookServiceScreen() {
             )}
 
             <TextInput
-              style={[styles.input, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+              style={[styles.input, { color: colors.text, backgroundColor: colors.background }]}
               placeholder="Enter your full address"
               placeholderTextColor={colors.textSecondary}
               value={address}
@@ -304,10 +304,10 @@ export default function BookServiceScreen() {
           </View>
         )}
 
-        <View style={[styles.card, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.card]}>
           <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 12 }}>Contact Phone Number</ThemedText>
           <TextInput
-            style={[styles.input, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+            style={[styles.input, { color: colors.text, backgroundColor: colors.background }]}
             placeholder="e.g. 07XXXXXXXX"
             placeholderTextColor={colors.textSecondary}
             keyboardType="phone-pad"
@@ -317,7 +317,7 @@ export default function BookServiceScreen() {
 
           <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginTop: 24, marginBottom: 12 }}>Additional Notes</ThemedText>
           <TextInput
-            style={[styles.input, styles.textArea, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+            style={[styles.input, styles.textArea, { color: colors.text, backgroundColor: colors.background }]}
             placeholder={isViewing ? "E.g. How many people are coming?" : "Any special instructions?"}
             placeholderTextColor={colors.textSecondary}
             multiline
@@ -357,9 +357,9 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.four, paddingVertical: Spacing.three },
   backBtn: { padding: 4 },
   scrollContent: { padding: Spacing.four, paddingBottom: 100 },
-  card: { padding: 16, borderRadius: 16, borderWidth: 1, marginBottom: 16 },
+  card: { padding: 16, borderRadius: 16,  marginBottom: 16 },
   dateChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1 },
+  chip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,  },
   input: { padding: 14, borderRadius: 12, borderWidth: 1, fontSize: 15 },
   textArea: { height: 100, textAlignVertical: 'top' },
   footer: { padding: Spacing.four, borderTopWidth: 1 },

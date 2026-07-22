@@ -171,7 +171,7 @@ export default function ManagePangoScreen() {
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Image Picker */}
-          <TouchableOpacity onPress={pickImage} style={[styles.imagePicker, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <TouchableOpacity onPress={pickImage} style={[styles.imagePicker]}>
             {image ? (
               <Image source={{ uri: image.uri }} style={styles.previewImage} />
             ) : (
@@ -184,22 +184,22 @@ export default function ManagePangoScreen() {
 
           <View style={styles.inputContainer}>
             <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Property Title</ThemedText>
-            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={title} onChangeText={setTitle} placeholder="e.g. Masaki Luxury Villa" placeholderTextColor={colors.textSecondary} />
+            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={title} onChangeText={setTitle} placeholder="e.g. Masaki Luxury Villa" placeholderTextColor={colors.textSecondary} />
           </View>
 
           <View style={styles.inputContainer}>
             <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Location / Address</ThemedText>
-            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={address} onChangeText={setAddress} placeholder="e.g. Masaki, Dar es Salaam" placeholderTextColor={colors.textSecondary} />
+            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={address} onChangeText={setAddress} placeholder="e.g. Masaki, Dar es Salaam" placeholderTextColor={colors.textSecondary} />
           </View>
 
           <View style={styles.inputContainer}>
             <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Monthly Rent (TZS)</ThemedText>
-            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={price} onChangeText={setPrice} placeholder="e.g. 2500000" placeholderTextColor={colors.textSecondary} keyboardType="numeric" />
+            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={price} onChangeText={setPrice} placeholder="e.g. 2500000" placeholderTextColor={colors.textSecondary} keyboardType="numeric" />
           </View>
 
           <View style={styles.inputContainer}>
             <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Detailed Description</ThemedText>
-            <TextInput style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} value={description} onChangeText={setDescription} placeholder="Describe the property..." placeholderTextColor={colors.textSecondary} multiline numberOfLines={4} />
+            <TextInput style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={description} onChangeText={setDescription} placeholder="Describe the property..." placeholderTextColor={colors.textSecondary} multiline numberOfLines={4} />
           </View>
 
           <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Features</ThemedText>
@@ -242,7 +242,7 @@ export default function ManagePangoScreen() {
           <ThemedText style={{ textAlign: 'center', marginTop: 40, color: colors.textSecondary }}>No properties found.</ThemedText>
         ) : (
           properties.map(prop => (
-            <View key={prop.id} style={[styles.listItem, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View key={prop.id} style={[styles.listItem]}>
               {prop.image_url ? (
                 <Image source={{ uri: prop.image_url }} style={styles.listImage} />
               ) : (
@@ -256,8 +256,8 @@ export default function ManagePangoScreen() {
                 <ThemedText style={{ color: colors.textSecondary, fontSize: 12, marginTop: 4 }} numberOfLines={1}>{prop.address}</ThemedText>
               </View>
               <View style={{ gap: 8 }}>
-                <TouchableOpacity onPress={() => handleEditClick(prop)} style={[styles.actionBtn, { backgroundColor: 'rgba(59, 130, 246, 0.1)' }]}>
-                  <Ionicons name="pencil" size={16} color="#3B82F6" />
+                <TouchableOpacity onPress={() => handleEditClick(prop)} style={[styles.actionBtn, { backgroundColor: 'rgba(212, 175, 55, 0.1)' }]}>
+                  <Ionicons name="pencil" size={16} color="#D4AF37" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDelete(prop.id)} style={[styles.actionBtn, { backgroundColor: 'rgba(239, 68, 68, 0.1)' }]}>
                   <Ionicons name="trash" size={16} color="#EF4444" />
@@ -278,17 +278,17 @@ const styles = StyleSheet.create({
   scrollContent: { padding: Spacing.four },
   
   // List Styles
-  listItem: { flexDirection: 'row', padding: 12, borderRadius: 16, borderWidth: 1, marginBottom: 12, alignItems: 'center' },
+  listItem: { flexDirection: 'row', padding: 12, borderRadius: 16,  marginBottom: 12, alignItems: 'center' },
   listImage: { width: 64, height: 64, borderRadius: 12 },
   actionBtn: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
 
   // Form Styles
-  imagePicker: { height: 160, borderRadius: 16, borderWidth: 1, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.five, overflow: 'hidden' },
+  imagePicker: { height: 160, borderRadius: 16,  borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.five, overflow: 'hidden' },
   previewImage: { width: '100%', height: '100%' },
   inputContainer: { marginBottom: Spacing.four },
   textInput: { height: 56, borderRadius: 16, borderWidth: 1, paddingHorizontal: 16, fontSize: 16 },
-  textArea: { height: 120, borderRadius: 16, borderWidth: 1, paddingHorizontal: 16, paddingTop: 16, fontSize: 16, textAlignVertical: 'top' },
+  textArea: { height: 120, borderRadius: 16,  paddingHorizontal: 16, paddingTop: 16, fontSize: 16, textAlignVertical: 'top' },
   featuresContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: Spacing.five },
-  featureChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1 },
+  featureChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,  },
   postBtn: { height: 56, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.four }
 });

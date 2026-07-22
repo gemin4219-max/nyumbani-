@@ -10,7 +10,9 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 
-export default function ManageUsafiScreen() {
+const GAS_FEATURES = ['15kg', '6kg', 'Oryx', 'Taifa', 'Mihan'];
+
+export default function ManageGasScreen() {
   const scheme = useColorScheme();
   const colorScheme = scheme === 'dark' ? 'dark' : 'light';
   const colors = Colors[colorScheme];
@@ -24,7 +26,8 @@ export default function ManageUsafiScreen() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
-  const [unit, setUnit] = useState('session');
+  const [unit, setUnit] = useState('15kg');
+  const [badgeText, setBadgeText] = useState('Fast Delivery');
   const [description, setDescription] = useState('');
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [image, setImage] = useState<{ uri: string, base64?: string } | null>(null);
@@ -36,7 +39,7 @@ export default function ManageUsafiScreen() {
 
   const fetchItems = async () => {
     setLoading(true);
-    const { data } = await supabase.from('usafi_services').select('*').order('created_at', { ascending: false });
+    const { data } = await supabase.from('gas_items').select('*').order('created_at', { ascending: false });
     if (data) setItems(data);
     setLoading(false);
   };
@@ -70,7 +73,8 @@ export default function ManageUsafiScreen() {
     setEditingId(null);
     setTitle('');
     setPrice('');
-    setUnit('session');
+    setUnit('15kg');
+    setBadgeText('Fast Delivery');
     setDescription('');
     setSelectedFeatures([]);
     setImage(null);
@@ -82,6 +86,7 @@ export default function ManageUsafiScreen() {
     setTitle(item.title);
     setPrice(item.price.toString());
     setUnit(item.unit);
+    setBadgeText(item.badge_text || '');
     setDescription(item.description || '');
     setSelectedFeatures(item.features || []);
     setImage(item.image_url ? { uri: item.image_url } : null);
@@ -89,10 +94,10 @@ export default function ManageUsafiScreen() {
   };
 
   const handleDelete = async (id: string) => {
-    Alert.alert('Delete Item', 'Are you sure you want to delete this service forever?', [
+    Alert.alert('Delete Gas Item', 'Are you sure you want to delete this item forever?', [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: async () => {
-        await supabase.from('usafi_services').delete().eq('id', id);
+        await supabase.from('gas_items').delete().eq('id', id);
         fetchItems();
       }}
     ]);
@@ -108,7 +113,7 @@ export default function ManageUsafiScreen() {
     let uploadedImageUrl = image?.uri;
 
     if (image?.base64) {
-      const fileName = `${Date.now()}_usafi.jpg`;
+      const fileName = `${Date.now()}_gas.jpg`;
       const { data, error: uploadError } = await supabase.storage
         .from('public_images')
         .upload(fileName, decode(image.base64), { contentType: 'image/jpeg' });
@@ -126,6 +131,7 @@ export default function ManageUsafiScreen() {
       title,
       price: Number(price),
       unit,
+      badge_text: badgeText,
       description,
       features: selectedFeatures,
       image_url: uploadedImageUrl,
@@ -133,10 +139,10 @@ export default function ManageUsafiScreen() {
 
     let error;
     if (editingId) {
-      const res = await supabase.from('usafi_services').update(payload).eq('id', editingId);
+      const res = await supabase.from('gas_items').update(payload).eq('id', editingId);
       error = res.error;
     } else {
-      const res = await supabase.from('usafi_services').insert(payload);
+      const res = await supabase.from('gas_items').insert(payload);
       error = res.error;
     }
 
@@ -145,7 +151,7 @@ export default function ManageUsafiScreen() {
     if (error) {
       alert('Error saving item: ' + error.message);
     } else {
-      alert(editingId ? 'Service Updated!' : 'Service Posted!');
+      alert(editingId ? 'Item Updated!' : 'Item Posted!');
       resetForm();
       fetchItems();
     }
@@ -158,7 +164,7 @@ export default function ManageUsafiScreen() {
           <TouchableOpacity onPress={resetForm} style={styles.backBtn}>
             <Ionicons name="close" size={24} color={colors.text} />
           </TouchableOpacity>
-          <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>{editingId ? 'Edit Service' : 'Post New Service'}</ThemedText>
+          <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>{editingId ? 'Edit Gas Item' : 'Add New Gas Item'}</ThemedText>
           <View style={{ width: 24 }} />
         </View>
 
@@ -175,21 +181,44 @@ export default function ManageUsafiScreen() {
           </TouchableOpacity>
 
           <View style={styles.inputContainer}>
-            <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Service Name</ThemedText>
-            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={title} onChangeText={setTitle} placeholder="e.g. Deep Sofa Cleaning" placeholderTextColor={colors.textSecondary} />
+            <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Brand / Name</ThemedText>
+            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={title} onChangeText={setTitle} placeholder="e.g. Oryx Gas Refill" placeholderTextColor={colors.textSecondary} />
+          </View>
+
+          <View style={{ flexDirection: 'row', gap: 16 }}>
+            <View style={[styles.inputContainer, { flex: 1 }]}>
+              <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Price (TZS)</ThemedText>
+              <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={price} onChangeText={setPrice} placeholder="e.g. 55000" placeholderTextColor={colors.textSecondary} keyboardType="numeric" />
+            </View>
+            <View style={[styles.inputContainer, { flex: 1 }]}>
+              <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Weight/Unit</ThemedText>
+              <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={unit} onChangeText={setUnit} placeholder="e.g. 15kg" placeholderTextColor={colors.textSecondary} />
+            </View>
           </View>
 
           <View style={styles.inputContainer}>
-            <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Base Price (TZS)</ThemedText>
-            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={price} onChangeText={setPrice} placeholder="e.g. 50000" placeholderTextColor={colors.textSecondary} keyboardType="numeric" />
+            <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Badge Text (Optional)</ThemedText>
+            <TextInput style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={badgeText} onChangeText={setBadgeText} placeholder="e.g. Fast Delivery" placeholderTextColor={colors.textSecondary} />
           </View>
 
           <View style={styles.inputContainer}>
             <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Detailed Description</ThemedText>
-            <TextInput style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={description} onChangeText={setDescription} placeholder="Describe the service..." placeholderTextColor={colors.textSecondary} multiline numberOfLines={4} />
+            <TextInput style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement }]} value={description} onChangeText={setDescription} placeholder="Describe the item..." placeholderTextColor={colors.textSecondary} multiline numberOfLines={4} />
           </View>
 
-          <TouchableOpacity style={[styles.postBtn, { backgroundColor: colors.primary, opacity: (!title || !price) ? 0.5 : 1 }]} onPress={handleSave} disabled={saving || !title || !price}>
+          <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Features / Tags</ThemedText>
+          <View style={styles.featuresContainer}>
+            {GAS_FEATURES.map(feat => {
+              const active = selectedFeatures.includes(feat);
+              return (
+                <TouchableOpacity key={feat} onPress={() => toggleFeature(feat)} style={[styles.featureChip, { backgroundColor: active ? colors.primary : colors.backgroundElement, borderColor: active ? colors.primary : colors.border }]}>
+                  <ThemedText style={{ color: active ? '#000' : colors.text, fontSize: 13, fontWeight: '600' }}>{feat}</ThemedText>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <TouchableOpacity style={[styles.postBtn, { backgroundColor: colors.primary, opacity: (!title || !price || !unit) ? 0.5 : 1 }]} onPress={handleSave} disabled={saving || !title || !price || !unit}>
             {saving ? <ActivityIndicator color="#000" /> : <ThemedText style={{ color: '#000', fontSize: 16, fontWeight: '700' }}>{editingId ? 'Save Changes' : 'Publish to Live App'}</ThemedText>}
           </TouchableOpacity>
         </ScrollView>
@@ -203,7 +232,7 @@ export default function ManageUsafiScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Manage Usafi</ThemedText>
+        <ThemedText style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>Manage Gas</ThemedText>
         <TouchableOpacity onPress={() => setIsEditing(true)}>
           <Ionicons name="add-circle" size={28} color={colors.primary} />
         </TouchableOpacity>
@@ -213,7 +242,7 @@ export default function ManageUsafiScreen() {
         {loading ? (
           <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
         ) : items.length === 0 ? (
-          <ThemedText style={{ textAlign: 'center', marginTop: 40, color: colors.textSecondary }}>No services found.</ThemedText>
+          <ThemedText style={{ textAlign: 'center', marginTop: 40, color: colors.textSecondary }}>No items found.</ThemedText>
         ) : (
           items.map(item => (
             <View key={item.id} style={[styles.listItem]}>
@@ -221,7 +250,7 @@ export default function ManageUsafiScreen() {
                 <Image source={{ uri: item.image_url }} style={styles.listImage} />
               ) : (
                 <View style={[styles.listImage, { backgroundColor: colors.border, justifyContent: 'center', alignItems: 'center' }]}>
-                  <Ionicons name="sparkles" size={24} color={colors.textSecondary} />
+                  <Ionicons name="flame" size={24} color={colors.textSecondary} />
                 </View>
               )}
               <View style={{ flex: 1, marginLeft: 12 }}>

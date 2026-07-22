@@ -17,17 +17,17 @@ export default function AdminDashboardScreen() {
 
   const AdminCard = ({ title, icon, route, description }: any) => (
     <TouchableOpacity 
-      style={[styles.adminCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+      style={[styles.card, { borderBottomColor: colors.border }]} 
       onPress={() => router.push(route)}
     >
-      <View style={[styles.iconContainer, { backgroundColor: colors.backgroundSelected }]}>
-        <Ionicons name={icon} size={24} color={colors.primary} />
+      <View style={[styles.iconContainer, { backgroundColor: 'rgba(212, 175, 55, 0.1)' }]}>
+        <Ionicons name={icon} size={22} color="#D4AF37" />
       </View>
-      <View style={{ flex: 1 }}>
-        <ThemedText style={{ fontSize: 16, fontWeight: '700', color: colors.text }}>{title}</ThemedText>
-        <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginTop: 4 }}>{description}</ThemedText>
+      <View style={{ flex: 1, paddingRight: 16 }}>
+        <ThemedText style={{ fontSize: 17, fontWeight: '700', color: colors.text }}>{title}</ThemedText>
+        <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginTop: 4, lineHeight: 18 }}>{description}</ThemedText>
       </View>
-      <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+      <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} style={{ opacity: 0.5 }} />
     </TouchableOpacity>
   );
 
@@ -76,6 +76,20 @@ export default function AdminDashboardScreen() {
         />
 
         <AdminCard 
+          title="Manage Gas" 
+          icon="flame" 
+          route="/admin/manage-gas"
+          description="Update gas cylinder prices, stock, and brands."
+        />
+
+        <AdminCard 
+          title="Manage Withdrawals" 
+          icon="cash" 
+          route="/admin/manage-withdrawals"
+          description="Approve and process user withdrawal requests."
+        />
+
+        <AdminCard 
           title="Manage Usafi" 
           icon="sparkles" 
           route="/admin/manage-usafi"
@@ -113,18 +127,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     marginBottom: Spacing.three,
   },
-  adminCard: {
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginBottom: 16,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,

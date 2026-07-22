@@ -118,8 +118,8 @@ export default function TabsLayout() {
             borderRadius: 12,
             justifyContent: 'center',
             alignItems: 'center',
-            borderWidth: 2,
-            borderColor: colors.background
+            
+            
           }}>
             <ThemedText style={{ color: '#FFF', fontSize: 12, fontWeight: '700' }}>{itemCount}</ThemedText>
             </View>

@@ -119,7 +119,7 @@ export default function ManageBookingsScreen() {
   const getStatusColor = (status: string) => {
     switch(status) {
       case 'pending': return '#F59E0B'; // Amber
-      case 'in_progress': return '#3B82F6'; // Blue
+      case 'in_progress': return '#D4AF37'; // Blue
       case 'completed': return '#10B981'; // Green
       case 'cancelled': return '#EF4444'; // Red
       default: return colors.textSecondary;
@@ -146,7 +146,7 @@ export default function ManageBookingsScreen() {
             <TouchableOpacity 
               key={booking.id} 
               onPress={() => promptStatusChange(booking)}
-              style={[styles.bookingCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+              style={[styles.bookingCard]}
             >
               <View style={styles.cardHeader}>
                 <ThemedText style={{ fontWeight: '700', fontSize: 16, color: colors.text, textTransform: 'capitalize' }}>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.four, paddingVertical: Spacing.three },
   backBtn: { padding: 4 },
   scrollContent: { padding: Spacing.four },
-  bookingCard: { padding: 16, borderRadius: 16, borderWidth: 1, marginBottom: 16 },
+  bookingCard: { padding: 16, borderRadius: 16,  marginBottom: 16 },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
   customerInfo: { backgroundColor: 'rgba(0,0,0,0.05)', padding: 12, borderRadius: 8 },

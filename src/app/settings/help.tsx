@@ -56,7 +56,7 @@ export default function HelpScreen() {
         </View>
 
         <ThemedText style={styles.sectionTitle}>Frequently Asked Questions</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.sectionContainer]}>
           {FAQS.map((faq, index) => {
             const isExpanded = expanded === index;
             return (
@@ -82,7 +82,7 @@ export default function HelpScreen() {
 
         {/* Contact Support CTA */}
         <HapticButton 
-          style={[styles.contactBtn, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+          style={[styles.contactBtn]}
           onPress={() => router.push('/settings/contact')}
         >
           <Ionicons name="chatbubbles-outline" size={24} color={colors.primary} style={{ marginRight: 16 }} />
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     borderRadius: 20,
-    borderWidth: 1,
+    
     overflow: 'hidden',
   },
   faqRow: {
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderRadius: 20,
-    borderWidth: 1,
+    
     marginTop: 24,
   }
 });

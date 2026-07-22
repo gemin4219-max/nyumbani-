@@ -80,7 +80,7 @@ export default function BookingProgressScreen() {
       iconName = 'checkmark-circle';
     }
     if (isCurrent) {
-      iconColor = '#3B82F6';
+      iconColor = '#D4AF37';
       iconName = 'radio-button-on';
     }
 
@@ -120,7 +120,7 @@ export default function BookingProgressScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={[styles.card, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.card]}>
           <View style={styles.cardHeader}>
             <View style={[styles.iconBox, { backgroundColor: colors.backgroundSelected }]}>
               <Ionicons name="briefcase-outline" size={24} color={colors.primary} />
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.four, paddingVertical: Spacing.three },
   backBtn: { padding: 4 },
   scrollContent: { padding: Spacing.four, paddingBottom: 100 },
-  card: { padding: 16, borderRadius: 16, borderWidth: 1, marginBottom: 16 },
+  card: { padding: 16, borderRadius: 16,  marginBottom: 16 },
   cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
   iconBox: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
   divider: { height: 1, width: '100%', marginBottom: 16 },

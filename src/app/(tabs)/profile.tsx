@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, useColorScheme, Modal, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, useColorScheme, Modal, TextInput, ActivityIndicator, Linking } from 'react-native';
 import { HapticButton } from '@/components/HapticButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -43,6 +43,19 @@ export default function ProfileTab() {
   const [editAddress, setEditAddress] = React.useState(profile?.address || '');
   const [saving, setSaving] = React.useState(false);
 
+  const handleSafeLink = async (url: string) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        alert("Action not supported on this device (e.g. simulator).");
+      }
+    } catch (e) {
+      alert("Error opening link.");
+    }
+  };
+
   const handleSaveProfile = async () => {
     if (!session?.user.id) return;
     setSaving(true);
@@ -74,7 +87,7 @@ export default function ProfileTab() {
         </View>
 
         {/* USER PROFILE HEADER */}
-        <View style={[styles.profileHeader, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.profileHeader]}>
           <View style={[styles.avatarLarge, { backgroundColor: colors.primary }]}>
             <ThemedText style={{ color: '#000', fontSize: 28, fontWeight: '700' }}>{initial}</ThemedText>
             <HapticButton hapticType="light"
@@ -112,7 +125,7 @@ export default function ProfileTab() {
 
         {/* SETTINGS SECTIONS */}
         <ThemedText style={styles.sectionTitle}>Account Settings</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={styles.sectionContainer}>
           <ProfileOption icon="person-outline" label="Personal Information" colorScheme={colorScheme} onPress={() => setIsEditing(true)} />
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
           <ProfileOption icon="location-outline" label="Saved Addresses" colorScheme={colorScheme} onPress={() => router.push('/settings/addresses')} />
@@ -121,22 +134,22 @@ export default function ProfileTab() {
         </View>
 
         <ThemedText style={styles.sectionTitle}>App Preferences</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={styles.sectionContainer}>
           <ProfileOption icon="notifications-outline" label="Notifications" colorScheme={colorScheme} onPress={() => router.push('/settings/notifications')} />
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
           <ProfileOption icon="shield-checkmark-outline" label="Privacy & Security" colorScheme={colorScheme} onPress={() => router.push('/settings/privacy')} />
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
-          <ProfileOption icon="moon-outline" label="Theme Settings" colorScheme={colorScheme} onPress={() => router.push('/settings/theme')} />
         </View>
 
         <ThemedText style={styles.sectionTitle}>Support</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={styles.sectionContainer}>
           <ProfileOption icon="help-circle-outline" label="Help Center" colorScheme={colorScheme} onPress={() => router.push('/settings/help')} />
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
           <ProfileOption icon="chatbubble-ellipses-outline" label="Contact Support" colorScheme={colorScheme} onPress={() => router.push('/settings/contact')} />
         </View>
 
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border, marginTop: 24 }]}>
+        <View style={{ height: 24 }} />
+
+        <View style={[styles.sectionContainer, { marginTop: 24 }]}>
           <ProfileOption 
             icon="log-out-outline" 
             label="Log Out" 
@@ -156,7 +169,7 @@ export default function ProfileTab() {
       {/* EDIT PROFILE MODAL */}
       <Modal visible={isEditing} animationType="slide" transparent={true}>
         <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.8)' }]}>
-          <View style={[styles.modalContent, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.modalContent]}>
             <View style={styles.modalHeader}>
               <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Edit Profile</ThemedText>
               <HapticButton hapticType="light" onPress={() => setIsEditing(false)}>
@@ -167,7 +180,7 @@ export default function ProfileTab() {
             <View style={styles.inputContainer}>
               <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Full Name</ThemedText>
               <TextInput
-                style={[styles.textInput, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                style={[styles.textInput, { color: colors.text, backgroundColor: colors.background }]}
                 value={editName}
                 onChangeText={setEditName}
                 placeholder="Enter full name"
@@ -178,7 +191,7 @@ export default function ProfileTab() {
             <View style={styles.inputContainer}>
               <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Phone Number</ThemedText>
               <TextInput
-                style={[styles.textInput, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                style={[styles.textInput, { color: colors.text, backgroundColor: colors.background }]}
                 value={editPhone}
                 onChangeText={setEditPhone}
                 placeholder="e.g. +255 700 000 000"
@@ -190,7 +203,7 @@ export default function ProfileTab() {
             <View style={styles.inputContainer}>
               <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Location / Address</ThemedText>
               <TextInput
-                style={[styles.textInput, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                style={[styles.textInput, { color: colors.text, backgroundColor: colors.background }]}
                 value={editAddress}
                 onChangeText={setEditAddress}
                 placeholder="e.g. Masaki, Dar es Salaam"
@@ -227,8 +240,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 32,
     marginHorizontal: Spacing.four,
-    borderRadius: 24,
-    borderWidth: 1,
     marginBottom: Spacing.four,
   },
   avatarLarge: {
@@ -247,7 +258,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
+    
   },
   sectionTitle: {
     fontSize: 14,
@@ -261,9 +272,6 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     marginHorizontal: Spacing.four,
-    borderRadius: 20,
-    borderWidth: 1,
-    overflow: 'hidden',
   },
   optionRow: {
     flexDirection: 'row',
@@ -287,7 +295,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 20,
-    borderWidth: 1,
+    
   },
   modalOverlay: {
     flex: 1,
@@ -311,7 +319,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 56,
     borderRadius: 16,
-    borderWidth: 1,
+    
     paddingHorizontal: 16,
     fontSize: 16,
   },

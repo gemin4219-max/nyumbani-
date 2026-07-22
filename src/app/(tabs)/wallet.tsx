@@ -2,14 +2,13 @@ import React from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { HapticButton } from '@/components/HapticButton';
 
 import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
-import { AnalyticsChart, DataPoint } from '@/components/AnalyticsChart';
 
 function ActionButton({ icon, label, colorScheme, onPress }: any) {
   const colors = Colors[colorScheme as 'light' | 'dark'];
@@ -51,70 +50,38 @@ export default function WalletTab() {
   const router = useRouter();
   
   const [balance, setBalance] = React.useState<number>(0);
-  const [monthlySpent, setMonthlySpent] = React.useState<number>(0);
-  const [chartData, setChartData] = React.useState<DataPoint[]>([]);
   const [transactions, setTransactions] = React.useState<any[]>([]);
 
-  React.useEffect(() => {
-    if (!session?.user.id) return;
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!session?.user.id) return;
 
-    const fetchWallet = async () => {
-      const { data } = await supabase
-        .from('wallets')
-        .select('*')
-        .eq('profile_id', session.user.id)
-        .single();
-      if (data) {
-        setBalance(data.balance);
-        fetchTransactions(data.id);
-      }
-    };
+      const fetchWallet = async () => {
+        const { data } = await supabase
+          .from('wallets')
+          .select('*')
+          .eq('profile_id', session.user.id)
+          .single();
+        if (data) {
+          setBalance(data.balance);
+          fetchTransactions(data.id);
+        }
+      };
 
-    const fetchTransactions = async (walletId: string) => {
-      // Fetch recent transactions for the list
-      const { data: recentTxs } = await supabase
-        .from('transactions')
-        .select('*')
-        .eq('wallet_id', walletId)
-        .order('created_at', { ascending: false })
-        .limit(10);
-      if (recentTxs) setTransactions(recentTxs);
+      const fetchTransactions = async (walletId: string) => {
+        // Fetch recent transactions for the list
+        const { data: recentTxs } = await supabase
+          .from('transactions')
+          .select('*')
+          .eq('wallet_id', walletId)
+          .order('created_at', { ascending: false })
+          .limit(10);
+        if (recentTxs) setTransactions(recentTxs);
+      };
 
-      // Calculate monthly expenditure
-      const now = new Date();
-      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-      
-      const { data: monthlyTxs } = await supabase
-        .from('transactions')
-        .select('amount, type')
-        .eq('wallet_id', walletId)
-        .gte('created_at', firstDayOfMonth)
-        .neq('type', 'topup');
-        
-      if (monthlyTxs) {
-        const spent = monthlyTxs.reduce((sum, tx) => sum + Number(tx.amount), 0);
-        setMonthlySpent(spent);
-
-        const weeks = [0, 0, 0, 0];
-        monthlyTxs.forEach((tx) => {
-          const txDate = new Date(tx.created_at);
-          const dayOfMonth = txDate.getDate();
-          let weekIndex = Math.floor((dayOfMonth - 1) / 7);
-          if (weekIndex > 3) weekIndex = 3;
-          weeks[weekIndex] += Number(tx.amount);
-        });
-
-        setChartData([
-          { label: 'Wk 1', value: weeks[0] },
-          { label: 'Wk 2', value: weeks[1] },
-          { label: 'Wk 3', value: weeks[2] },
-          { label: 'Wk 4', value: weeks[3] },
-        ]);
-      }
-    };
-
-    fetchWallet();
-  }, [session]);
+      fetchWallet();
+    }, [session])
+  );
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
@@ -136,34 +103,27 @@ export default function WalletTab() {
           <View style={styles.cardDecoration2} />
         </View>
 
-        {/* MONTHLY EXPENDITURE */}
+        {/* VIEW ANALYTICS BUTTON */}
         <View style={styles.expenditureRow}>
-          <View style={[styles.expenditureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <HapticButton hapticType="selection" onPress={() => router.push('/wallet/analytics')} style={[styles.expenditureCard, { backgroundColor: colors.backgroundElement, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={[styles.expenditureIcon, { backgroundColor: 'rgba(239, 68, 68, 0.1)' }]}>
-                <Ionicons name="trending-down" size={20} color="#EF4444" />
+              <View style={[styles.expenditureIcon, { backgroundColor: 'rgba(212, 175, 55, 0.1)' }]}>
+                <Ionicons name="pie-chart" size={20} color="#D4AF37" />
               </View>
-              <View style={{ marginLeft: 12, flex: 1 }}>
-                <ThemedText style={{ fontSize: 13, color: colors.textSecondary }}>Spent This Month</ThemedText>
-                <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text, marginTop: 2 }}>
-                  TZS {monthlySpent.toLocaleString()}
-                </ThemedText>
+              <View style={{ marginLeft: 12 }}>
+                <ThemedText style={{ fontSize: 16, fontWeight: '700', color: colors.text }}>Analytics</ThemedText>
+                <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}>Track your spending</ThemedText>
               </View>
             </View>
-            
-            {chartData.length > 0 && (
-              <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border }}>
-                <AnalyticsChart data={chartData} />
-              </View>
-            )}
-          </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+          </HapticButton>
         </View>
 
         {/* ACTIONS */}
         <View style={styles.actionsRow}>
           <ActionButton icon="add" label="Top Up" colorScheme={colorScheme} onPress={() => router.push('/wallet/topup')} />
-          <ActionButton icon="swap-horizontal" label="Transfer" colorScheme={colorScheme} />
-          <ActionButton icon="arrow-down" label="Withdraw" colorScheme={colorScheme} />
+          <ActionButton icon="swap-horizontal" label="Transfer" colorScheme={colorScheme} onPress={() => router.push('/wallet/transfer')} />
+          <ActionButton icon="arrow-down" label="Withdraw" colorScheme={colorScheme} onPress={() => router.push('/wallet/withdraw')} />
           <ActionButton icon="scan" label="Scan" colorScheme={colorScheme} />
         </View>
 
@@ -174,31 +134,35 @@ export default function WalletTab() {
         <View style={styles.actionsRow}>
           <ActionButton icon="flash" label="LUKU" colorScheme={colorScheme} onPress={() => router.push('/wallet/luku')} />
           <ActionButton icon="water" label="Water" colorScheme={colorScheme} onPress={() => router.push('/wallet/water')} />
-          <ActionButton icon="tv" label="TV / Cable" colorScheme={colorScheme} />
-          <ActionButton icon="wifi" label="Internet" colorScheme={colorScheme} />
+          <ActionButton icon="tv" label="TV" colorScheme={colorScheme} />
+          <ActionButton icon="flame" label="Gas" colorScheme={colorScheme} onPress={() => router.push('/gas/')} />
         </View>
 
         {/* TRANSACTIONS */}
         <View style={styles.sectionHeader}>
           <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Recent Transactions</ThemedText>
-          <HapticButton hapticType="selection">
+          <HapticButton hapticType="selection" onPress={() => router.push('/wallet/transactions')}>
             <ThemedText style={{ fontSize: 14, color: colors.primary, fontWeight: '600' }}>See All</ThemedText>
           </HapticButton>
         </View>
 
-        <View style={[styles.transactionsContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.transactionsContainer]}>
           {transactions.length === 0 ? (
             <ThemedText style={{ color: colors.textSecondary, textAlign: 'center', padding: 16 }}>No transactions yet.</ThemedText>
           ) : (
-            transactions.map((tx) => (
-              <TransactionRow 
-                key={tx.id}
-                title={tx.description || 'Transaction'} 
-                date={new Date(tx.created_at).toLocaleDateString()} 
-                amount={tx.amount.toLocaleString()} 
-                type={tx.type === 'topup' ? 'credit' : 'debit'} 
-                colorScheme={colorScheme} 
-              />
+            transactions.map((tx, index) => (
+              <View key={tx.id}>
+                <TransactionRow 
+                  title={tx.description || 'Transaction'} 
+                  date={new Date(tx.created_at).toLocaleDateString()} 
+                  amount={tx.amount.toLocaleString()} 
+                  type={tx.type === 'topup' ? 'credit' : 'debit'} 
+                  colorScheme={colorScheme} 
+                />
+                {index < transactions.length - 1 && (
+                  <View style={{ height: 1, backgroundColor: colors.border, marginLeft: 52, opacity: 0.5, marginTop: 12, marginBottom: 12 }} />
+                )}
+              </View>
             ))
           )}
         </View>
@@ -250,7 +214,7 @@ const styles = StyleSheet.create({
   expenditureCard: {
     padding: 16,
     borderRadius: 20,
-    borderWidth: 1,
+    
   },
   expenditureIcon: {
     width: 44,
@@ -284,11 +248,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.three,
   },
   transactionsContainer: {
-    marginHorizontal: Spacing.four,
-    borderRadius: 20,
-    padding: 16,
-    borderWidth: 1,
-    gap: 20,
+    paddingHorizontal: Spacing.four,
   },
   transactionRow: {
     flexDirection: 'row',

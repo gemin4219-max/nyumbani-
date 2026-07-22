@@ -75,7 +75,7 @@ export default function AddressesScreen() {
           </View>
         ) : (
           addresses.map((addr) => (
-            <View key={addr.id} style={[styles.addressCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View key={addr.id} style={[styles.addressCard]}>
               <View style={styles.addressHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <Ionicons name={addr.title.toLowerCase() === 'home' ? 'home' : 'business'} size={20} color={colors.primary} />
@@ -119,11 +119,11 @@ export default function AddressesScreen() {
       {/* Add Address Modal */}
       <Modal visible={showAddModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.modalContent]}>
             <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 16 }}>Add New Address</ThemedText>
             
             <TextInput
-              style={[styles.input, { color: colors.text, borderColor: colors.border }]}
+              style={[styles.input, { color: colors.text }]}
               placeholder="Title (e.g. Work, Home)"
               placeholderTextColor={colors.textSecondary}
               value={newTitle}
@@ -131,7 +131,7 @@ export default function AddressesScreen() {
             />
             
             <TextInput
-              style={[styles.input, { color: colors.text, borderColor: colors.border, marginTop: 12, height: 80 }]}
+              style={[styles.input, { color: colors.text, marginTop: 12, height: 80 }]}
               placeholder="Full Address (e.g. 123 Masaki St...)"
               placeholderTextColor={colors.textSecondary}
               value={newAddress}
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   addressCard: {
     borderRadius: 16,
-    borderWidth: 1,
+    
     padding: 16,
     marginBottom: 16,
   },
@@ -235,11 +235,11 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     borderRadius: 20,
-    borderWidth: 1,
+    
     padding: 24,
   },
   input: {
-    borderWidth: 1,
+    
     borderRadius: 12,
     padding: 14,
     fontSize: 15,

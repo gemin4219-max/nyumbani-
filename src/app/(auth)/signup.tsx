@@ -52,7 +52,7 @@ export default function SignUpScreen() {
         </View>
 
         <View style={styles.form}>
-          <View style={[styles.inputContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.inputContainer]}>
             <Ionicons name="person-outline" size={20} color={colors.textSecondary} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -63,7 +63,7 @@ export default function SignUpScreen() {
             />
           </View>
 
-          <View style={[styles.inputContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.inputContainer]}>
             <Ionicons name="mail-outline" size={20} color={colors.textSecondary} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -76,7 +76,7 @@ export default function SignUpScreen() {
             />
           </View>
 
-          <View style={[styles.inputContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.inputContainer]}>
             <Ionicons name="lock-closed-outline" size={20} color={colors.textSecondary} style={styles.inputIcon} />
             <TextInput
               style={[styles.input, { color: colors.text }]}
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    
     borderRadius: 16,
     marginBottom: 16,
     paddingHorizontal: 16,

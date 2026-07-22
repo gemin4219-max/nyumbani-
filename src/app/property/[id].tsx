@@ -97,7 +97,7 @@ export default function PropertyDetailsScreen() {
             </TouchableOpacity>
           </View>
 
-          <View style={[styles.priceCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.priceCard]}>
             <ThemedText style={{ fontSize: 14, color: colors.textSecondary }}>Rent Price</ThemedText>
             <ThemedText style={{ fontSize: 24, fontWeight: '800', color: colors.primary, marginTop: 4 }}>
               TZS {Number(property.price).toLocaleString()} <ThemedText style={{ fontSize: 14, fontWeight: '400', color: colors.textSecondary }}>/ month</ThemedText>
@@ -152,7 +152,7 @@ function SafeAreaHeader({ router, colors }: any) {
 
 function FeatureItem({ icon, label, colors }: any) {
   return (
-    <View style={[styles.featureItem, { backgroundColor: colors.backgroundElement }]}>
+    <View style={styles.featureItem}>
       <Ionicons name={icon} size={20} color={colors.primary} />
       <ThemedText style={{ fontSize: 13, fontWeight: '600', color: colors.text, marginTop: 8 }}>{label}</ThemedText>
     </View>
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.five,
     padding: Spacing.four,
     borderRadius: 20,
-    borderWidth: 1,
+    
   },
   section: {
     marginTop: Spacing.six,

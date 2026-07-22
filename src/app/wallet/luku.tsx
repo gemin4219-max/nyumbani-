@@ -111,7 +111,7 @@ export default function LukuScreen() {
           <ThemedText style={{ fontSize: 24, fontWeight: '700', marginTop: 24 }}>Payment Successful</ThemedText>
           <ThemedText style={{ fontSize: 16, color: colors.textSecondary, marginTop: 8 }}>Your LUKU token has been generated.</ThemedText>
           
-          <View style={[styles.tokenCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.tokenCard]}>
             <ThemedText style={{ color: colors.textSecondary, marginBottom: 8, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Token Number</ThemedText>
             <ThemedText style={{ fontSize: 28, fontWeight: '800', color: colors.primary, textAlign: 'center', letterSpacing: 2 }}>{tokenReceipt}</ThemedText>
             <ThemedText style={{ color: colors.textSecondary, marginTop: 16, fontSize: 14 }}>Meter: {meterNumber}</ThemedText>
@@ -145,7 +145,7 @@ export default function LukuScreen() {
           
           <View style={[styles.inputGroup, { marginTop: 16 }]}>
             <ThemedText style={{ color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Meter Number</ThemedText>
-            <View style={[styles.phoneInputContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View style={[styles.phoneInputContainer]}>
               <Ionicons name="flash-outline" size={20} color={colors.primary} style={{ marginRight: 8 }} />
               <TextInput
                 style={[styles.phoneInput, { color: colors.text }]}
@@ -181,7 +181,7 @@ export default function LukuScreen() {
 
           <View style={[styles.inputGroup, { marginTop: 16 }]}>
             <ThemedText style={{ color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Amount (TZS)</ThemedText>
-            <View style={[styles.phoneInputContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View style={[styles.phoneInputContainer]}>
               <ThemedText style={{ color: colors.textSecondary, marginRight: 8, fontWeight: '600' }}>TZS</ThemedText>
               <TextInput
                 style={[styles.phoneInput, { color: colors.text }]}
@@ -224,6 +224,6 @@ const styles = StyleSheet.create({
   savedMeterBtn: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, borderWidth: 1, marginRight: 12 },
   submitBtn: { height: 56, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
   successCircle: { width: 120, height: 120, borderRadius: 60, justifyContent: 'center', alignItems: 'center' },
-  tokenCard: { width: '100%', padding: 24, borderRadius: 24, borderWidth: 1, alignItems: 'center', marginTop: 32 },
+  tokenCard: { width: '100%', padding: 24, borderRadius: 24,  alignItems: 'center', marginTop: 32 },
   doneBtn: { width: '100%', height: 56, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginTop: 32 }
 });

@@ -77,7 +77,7 @@ export default function CameraViewerScreen() {
                 }}
               />
             </View>
-            <View style={[styles.statusBox, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+            <View style={[styles.statusBox]}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={[styles.pulseDot, { backgroundColor: '#10B981' }]} />
                 <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text, marginLeft: 8 }}>Live Feed Active</ThemedText>
@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
   videoContainer: { width: '100%', alignItems: 'center' },
   videoWrapper: { width: width, height: width * (9/16), backgroundColor: '#000', marginTop: Spacing.four },
   video: { flex: 1 },
-  statusBox: { width: width - Spacing.four * 2, padding: 16, borderRadius: 16, borderWidth: 1, marginTop: Spacing.six },
+  statusBox: { width: width - Spacing.four * 2, padding: 16, borderRadius: 16,  marginTop: Spacing.six },
   pulseDot: { width: 10, height: 10, borderRadius: 5 }
 });

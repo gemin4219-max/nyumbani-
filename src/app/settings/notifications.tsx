@@ -32,7 +32,7 @@ export default function NotificationsScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         
         <ThemedText style={styles.sectionTitle}>Delivery Methods</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.sectionContainer]}>
           <View style={styles.settingRow}>
             <View style={{ flex: 1, paddingRight: 16 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Push Notifications</ThemedText>
@@ -51,7 +51,7 @@ export default function NotificationsScreen() {
         </View>
 
         <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>Alert Types</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.sectionContainer]}>
           <View style={styles.settingRow}>
             <View style={{ flex: 1, paddingRight: 16 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Promotions & Offers</ThemedText>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     borderRadius: 20,
-    borderWidth: 1,
+    
     overflow: 'hidden',
   },
   settingRow: {

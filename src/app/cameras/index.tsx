@@ -77,7 +77,7 @@ export default function CamerasHubScreen() {
           </View>
         }
         ListEmptyComponent={
-          <View style={{ alignItems: 'center', marginTop: 40, padding: 20, borderRadius: 20, backgroundColor: colors.backgroundElement, borderWidth: 1, borderColor: colors.border }}>
+          <View style={{ alignItems: 'center', marginTop: 40, padding: 20, borderRadius: 20, backgroundColor: colors.backgroundElement, borderWidth: 1 }}>
             <Ionicons name="videocam-off-outline" size={48} color={colors.textSecondary} />
             <ThemedText style={{ marginTop: 16, fontSize: 16, fontWeight: '600', color: colors.text }}>No cameras linked</ThemedText>
             <ThemedText style={{ marginTop: 8, textAlign: 'center', color: colors.textSecondary }}>Link your IP cameras to view live feeds right from the Nyumbani app.</ThemedText>
@@ -94,11 +94,11 @@ export default function CamerasHubScreen() {
           <TouchableOpacity 
             activeOpacity={0.9} 
             onPress={() => { hapticSelection(); router.push(`/cameras/${item.id}`); }}
-            style={[styles.cameraCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+            style={[styles.cameraCard]}
           >
             <View style={styles.cardContent}>
-              <View style={[styles.iconContainer, { backgroundColor: 'rgba(59, 130, 246, 0.1)' }]}>
-                <Ionicons name="videocam" size={24} color="#3B82F6" />
+              <View style={[styles.iconContainer, { backgroundColor: 'rgba(212, 175, 55, 0.1)' }]}>
+                <Ionicons name="videocam" size={24} color="#D4AF37" />
               </View>
               <View style={{ flex: 1, marginLeft: 16 }}>
                 <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>{item.name}</ThemedText>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.four, paddingVertical: Spacing.three },
   backBtn: { padding: 4 },
   scrollContent: { paddingTop: Spacing.two, paddingBottom: 100, paddingHorizontal: Spacing.four },
-  cameraCard: { borderRadius: 16, borderWidth: 1, marginBottom: 16 },
+  cameraCard: { borderRadius: 16,  marginBottom: 16 },
   cardContent: { flexDirection: 'row', alignItems: 'center', padding: 16 },
   iconContainer: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center' }
 });

@@ -20,7 +20,6 @@ export function PropertyCard({ property, colorScheme, fullWidth }: any) {
       onPress={() => { hapticMedium(); router.push(`/property/${property.id}`); }}
       style={[
         styles.propertyCard, 
-        { backgroundColor: colors.backgroundElement, borderColor: colors.border },
         fullWidth && { width: '100%', marginRight: 0 }
       ]}
     >
@@ -76,7 +75,8 @@ export function ShopItemCard({ item, colorScheme, type }: any) {
   return (
     <HapticButton hapticType="selection"
       activeOpacity={0.9} 
-      style={[styles.shopCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+      onPress={() => { hapticMedium(); router.push(`/product/${item.id}?type=${type}`); }}
+      style={[styles.shopCard]}
     >
       <ImageBackground source={item.image_url ? { uri: item.image_url } : item.image} style={styles.shopImage} imageStyle={{ borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
         {item.badge_text && (
@@ -129,7 +129,8 @@ export function ShopItemCardFullWidth({ item, colorScheme, type }: any) {
   return (
     <HapticButton hapticType="selection"
       activeOpacity={0.9} 
-      style={[styles.shopCardFull, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+      onPress={() => { hapticMedium(); router.push(`/product/${item.id}?type=${type}`); }}
+      style={[styles.shopCardFull]}
     >
       {item.image_url ? (
         <ImageBackground source={{ uri: item.image_url }} style={styles.shopImageFull} imageStyle={{ borderTopLeftRadius: 16, borderBottomLeftRadius: 16 }} />
@@ -162,12 +163,12 @@ export function ShopItemCardFullWidth({ item, colorScheme, type }: any) {
 }
 
 const styles = StyleSheet.create({
-  propertyCard: { width: 280, marginRight: 16, borderRadius: 20, borderWidth: 1 },
+  propertyCard: { width: 280, marginRight: 16, borderRadius: 20,  },
   propertyImage: { width: '100%', height: 180 },
-  shopCard: { width: 160, marginRight: 16, borderRadius: 16, borderWidth: 1 },
+  shopCard: { width: 160, marginRight: 16, borderRadius: 16,  },
   shopImage: { width: '100%', height: 120 },
   addToCartBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 8, borderRadius: 8 },
   
-  shopCardFull: { flexDirection: 'row', marginBottom: 16, borderRadius: 16, borderWidth: 1, overflow: 'hidden' },
+  shopCardFull: { flexDirection: 'row', marginBottom: 16, borderRadius: 16,  overflow: 'hidden' },
   shopImageFull: { width: 120, height: 120 }
 });

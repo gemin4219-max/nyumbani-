@@ -38,13 +38,13 @@ export default function RelocationScreen() {
         </ImageBackground>
 
         <View style={styles.content}>
-          <View style={[styles.featureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.featureCard]}>
             <Ionicons name="car-sport" size={32} color={colors.primary} />
             <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text, marginTop: 12 }}>Reliable Trucks</ThemedText>
             <ThemedText style={{ fontSize: 14, color: colors.textSecondary, marginTop: 4 }}>We have a fleet of trucks ready to move your items safely.</ThemedText>
           </View>
 
-          <View style={[styles.featureCard, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+          <View style={[styles.featureCard]}>
             <Ionicons name="shield-checkmark" size={32} color={colors.primary} />
             <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text, marginTop: 12 }}>Safe & Secure</ThemedText>
             <ThemedText style={{ fontSize: 14, color: colors.textSecondary, marginTop: 4 }}>Your belongings are packed and transported with the utmost care.</ThemedText>
@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
   heroImage: { width: '100%', height: 280, justifyContent: 'flex-end' },
   heroOverlay: { backgroundColor: 'rgba(0,0,0,0.5)', padding: Spacing.four, borderRadius: 24, borderTopLeftRadius: 0, borderTopRightRadius: 0 },
   content: { marginTop: Spacing.six },
-  featureCard: { padding: Spacing.four, borderRadius: 20, borderWidth: 1, marginBottom: Spacing.four },
+  featureCard: { padding: Spacing.four, borderRadius: 20,  marginBottom: Spacing.four },
   callBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 16, borderRadius: 16, marginTop: Spacing.four }
 });

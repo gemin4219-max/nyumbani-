@@ -56,7 +56,7 @@ export default function PrivacyScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         
         <ThemedText style={styles.sectionTitle}>Security</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.sectionContainer]}>
           <HapticButton hapticType="selection" style={styles.settingRow} onPress={handleChangePassword}>
             <View style={{ flex: 1 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Change Password</ThemedText>
@@ -67,7 +67,7 @@ export default function PrivacyScreen() {
         </View>
 
         <ThemedText style={[styles.sectionTitle, { marginTop: 24 }]}>Data Management</ThemedText>
-        <View style={[styles.sectionContainer, { backgroundColor: colors.backgroundElement, borderColor: colors.border }]}>
+        <View style={[styles.sectionContainer]}>
           <HapticButton hapticType="selection" style={styles.settingRow} onPress={() => alert('Data export started. We will email you a secure link.')}>
             <View style={{ flex: 1 }}>
               <ThemedText style={{ fontSize: 16, fontWeight: '600', color: colors.text }}>Export My Data</ThemedText>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     borderRadius: 20,
-    borderWidth: 1,
+    
     overflow: 'hidden',
   },
   settingRow: {

@@ -22,6 +22,7 @@ const SERVICES = [
   { id: '3', title: 'Kuhama', image: require('../../../assets/images/kuhama.png'), route: '/book/relocation' },
   { id: '4', title: 'Sokoni', image: require('../../../assets/images/sokoni.png'), route: '/market/' },
   { id: '5', title: 'Smart Home', image: require('../../../assets/images/smarthome.png'), route: '/cameras/' },
+  { id: '6', title: 'Gas Refill', image: require('../../../assets/images/sokoni.png'), route: '/gas/' },
 ];
 
 function ServiceCarousel({ colorScheme }: { colorScheme: 'light' | 'dark' }) {
@@ -96,6 +97,7 @@ export default function HomeTab() {
   const [featuredSokoni, setFeaturedSokoni] = React.useState<any[]>([]);
   const [featuredUsafi, setFeaturedUsafi] = React.useState<any[]>([]);
   const [featuredKariakoo, setFeaturedKariakoo] = React.useState<any[]>([]);
+  const [featuredGas, setFeaturedGas] = React.useState<any[]>([]);
 
   const [refreshing, setRefreshing] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -116,6 +118,10 @@ export default function HomeTab() {
     // Fetch Properties
     const { data: propData } = await supabase.from('properties').select('*').eq('status', 'vacant').limit(3);
     if (propData) setFeaturedProperties(propData);
+    
+    // Fetch Gas
+    const { data: gas } = await supabase.from('gas_items').select('*').limit(5);
+    if (gas) setFeaturedGas(gas);
 
     // Fetch Marketplace Items
     const [{ data: sokoni }, { data: usafi }, { data: kariakoo }] = await Promise.all([
@@ -126,6 +132,8 @@ export default function HomeTab() {
     if (sokoni) setFeaturedSokoni(sokoni);
     if (usafi) setFeaturedUsafi(usafi);
     if (kariakoo) setFeaturedKariakoo(kariakoo);
+    if (gas) setFeaturedGas(gas);
+    
     setInitialLoading(false);
   };
 
@@ -224,15 +232,29 @@ export default function HomeTab() {
           </>
         )}
 
+        {/* HOT & NEW GAS REFILL */}
+        {featuredGas.length > 0 && (
+          <>
+            <View style={styles.sectionHeader}>
+              <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Fast Gas Refill</ThemedText>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.propertyScroll}>
+              {featuredGas.map((item) => (
+                <ShopItemCard key={item.id} item={{...item, image: item.image_url ? { uri: item.image_url } : require('../../../assets/images/sokoni.png')}} colorScheme={colorScheme} type="gas" />
+              ))}
+            </ScrollView>
+          </>
+        )}
+
         {/* RECENT ACTIVITY */}
         <View style={styles.sectionHeader}>
           <ThemedText style={{ fontSize: 18, fontWeight: '700', color: colors.text }}>Recent Activity</ThemedText>
         </View>
         
         {recentActivity ? (
-          <View style={[styles.activityCard, { backgroundColor: colors.backgroundElement }]}>
-            <View style={[styles.activityIcon, { backgroundColor: 'rgba(59, 130, 246, 0.1)' }]}>
-              <Ionicons name="calendar-outline" color="#3B82F6" size={20} />
+          <View style={styles.activityCard}>
+            <View style={[styles.activityIcon, { backgroundColor: 'rgba(212, 175, 55, 0.1)' }]}>
+              <Ionicons name="calendar-outline" color="#D4AF37" size={20} />
             </View>
             <View style={{ flex: 1, marginHorizontal: 12 }}>
               <ThemedText style={{ fontSize: 15, fontWeight: '600', color: colors.text }}>
@@ -347,7 +369,7 @@ const styles = StyleSheet.create({
   propertyCard: {
     width: 280,
     borderRadius: 20,
-    borderWidth: 1,
+    
     overflow: 'hidden',
   },
   propertyImage: {
@@ -357,7 +379,7 @@ const styles = StyleSheet.create({
   shopCard: {
     width: 160,
     borderRadius: 16,
-    borderWidth: 1,
+    
     overflow: 'hidden',
   },
   shopImage: {

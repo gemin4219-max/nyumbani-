@@ -53,7 +53,7 @@ export default function ContactScreen() {
         <View style={styles.inputContainer}>
           <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Subject</ThemedText>
           <TextInput
-            style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+            style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]}
             value={subject}
             onChangeText={setSubject}
             placeholder="e.g., Booking Issue"
@@ -64,7 +64,7 @@ export default function ContactScreen() {
         <View style={styles.inputContainer}>
           <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Message</ThemedText>
           <TextInput
-            style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]}
+            style={[styles.textArea, { color: colors.text, backgroundColor: colors.backgroundElement }]}
             value={message}
             onChangeText={setMessage}
             placeholder="Please describe your issue in detail..."
@@ -118,14 +118,14 @@ const styles = StyleSheet.create({
   textInput: {
     height: 56,
     borderRadius: 16,
-    borderWidth: 1,
+    
     paddingHorizontal: 16,
     fontSize: 16,
   },
   textArea: {
     height: 150,
     borderRadius: 16,
-    borderWidth: 1,
+    
     paddingHorizontal: 16,
     paddingVertical: 16,
     fontSize: 16,

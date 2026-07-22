@@ -66,7 +66,7 @@ export default function AddCameraScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         
         <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={24} color="#3B82F6" />
+          <Ionicons name="information-circle" size={24} color="#D4AF37" />
           <ThemedText style={{ flex: 1, marginLeft: 12, fontSize: 13, color: colors.text, lineHeight: 20 }}>
             Enter your IP Camera's stream URL (HLS or MP4). If you don't have one, you can use the default sample video URL provided below to test the feature!
           </ThemedText>
@@ -75,7 +75,7 @@ export default function AddCameraScreen() {
         <View style={styles.inputContainer}>
           <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Camera Location / Name</ThemedText>
           <TextInput 
-            style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} 
+            style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} 
             value={name} 
             onChangeText={setName} 
             placeholder="e.g. Living Room, Front Door" 
@@ -86,7 +86,7 @@ export default function AddCameraScreen() {
         <View style={styles.inputContainer}>
           <ThemedText style={{ fontSize: 13, color: colors.textSecondary, marginBottom: 8, marginLeft: 4 }}>Stream URL</ThemedText>
           <TextInput 
-            style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement, borderColor: colors.border }]} 
+            style={[styles.textInput, { color: colors.text, backgroundColor: colors.backgroundElement }]} 
             value={streamUrl} 
             onChangeText={setStreamUrl} 
             placeholder="http://..." 
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.four, paddingVertical: Spacing.three },
   backBtn: { padding: 4 },
   scrollContent: { padding: Spacing.four },
-  infoBox: { flexDirection: 'row', backgroundColor: 'rgba(59, 130, 246, 0.1)', padding: 16, borderRadius: 12, marginBottom: Spacing.six, alignItems: 'center' },
+  infoBox: { flexDirection: 'row', backgroundColor: 'rgba(212, 175, 55, 0.1)', padding: 16, borderRadius: 12, marginBottom: Spacing.six, alignItems: 'center' },
   inputContainer: { marginBottom: Spacing.five },
   textInput: { height: 56, borderRadius: 16, borderWidth: 1, paddingHorizontal: 16, fontSize: 16 },
   postBtn: { height: 56, borderRadius: 16, justifyContent: 'center', alignItems: 'center', marginTop: Spacing.four }
