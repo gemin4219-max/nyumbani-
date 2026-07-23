@@ -134,8 +134,12 @@ export default function WalletTab() {
         <View style={styles.actionsRow}>
           <ActionButton icon="flash" label="LUKU" colorScheme={colorScheme} onPress={() => router.push('/wallet/luku')} />
           <ActionButton icon="water" label="Water" colorScheme={colorScheme} onPress={() => router.push('/wallet/water')} />
-          <ActionButton icon="tv" label="TV" colorScheme={colorScheme} />
+          <ActionButton icon="wifi" label="Internet" colorScheme={colorScheme} />
           <ActionButton icon="flame" label="Gas" colorScheme={colorScheme} onPress={() => router.push('/gas/')} />
+          <ActionButton icon="tv" label="TV" colorScheme={colorScheme} />
+          <View style={{ width: '23%' }} />
+          <View style={{ width: '23%' }} />
+          <View style={{ width: '23%' }} />
         </View>
 
         {/* TRANSACTIONS */}
@@ -226,12 +230,14 @@ const styles = StyleSheet.create({
   actionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
     paddingHorizontal: Spacing.four,
     marginBottom: Spacing.five,
   },
   actionBtn: {
     alignItems: 'center',
     width: '23%',
+    marginBottom: 16,
   },
   actionIcon: {
     width: 56,
